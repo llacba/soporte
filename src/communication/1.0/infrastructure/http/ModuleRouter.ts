@@ -1,4 +1,4 @@
-import getPhoneRegion from '@communication/infrastructure/http/handler/getPhoneRegion.js';
+import assignPhoneRegion from '@communication/infrastructure/http/handler/assignPhoneRegion.js';
 import sendEventsList from '@communication/infrastructure/http/handler/sendEventsList.js';
 import sendMessage from '@communication/infrastructure/http/handler/sendMessage.js';
 import subscribe from '@communication/infrastructure/http/handler/subscribe.js';
@@ -35,7 +35,7 @@ export class ModuleRouter implements HttpRouter {
     this.router.get('/subscribe', subscribe);
     this.router.post('/send-events-list', sendEventsList);
     this.router.post('/messages', sendMessage);
-    this.router.post('/phone-region', getPhoneRegion);
+    this.router.post('/phone-region', assignPhoneRegion);
 
     return this.router;
   }

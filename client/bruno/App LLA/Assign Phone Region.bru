@@ -1,19 +1,22 @@
 meta {
-  name: Send events list
+  name: Assign Phone Region
   type: http
-  seq: 4
+  seq: 5
 }
 
 post {
-  url: {{host}}/communication/send-events-list
+  url: {{host}}/communication/phone-region
   body: json
   auth: none
 }
 
 body:json {
   {
+    "id": 101,
+    "inbox_id": 7,
     "meta": {
       "sender": {
+        "id": 1,
         "phone_number": "+5493516511912"
       }
     }

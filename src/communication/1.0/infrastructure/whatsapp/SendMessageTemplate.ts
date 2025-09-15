@@ -54,7 +54,7 @@ export class SendMessageTemplate {
     this.logger.debug('WhatsApp response', [response.data]);
 
     if (response.status === HTTP_SUCCESS_CODES.OK) {
-      this.logger.info(`WhatsApp to ${ targetPhoneNumber } sent successfully.`);
+      this.logger.info(`WhatsApp to ${ targetPhoneNumber.toPrimitives() } sent successfully.`);
 
       return;
     }

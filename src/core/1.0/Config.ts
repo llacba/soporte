@@ -117,6 +117,18 @@ export class Config {
     return process.env.META_WHATSAPP_WEBHOOK_TOKEN as string;
   }
 
+  public getChatwootApiUrl (): string {
+    return process.env.CHATWOOT_API_URL as string;
+  }
+
+  public getChatwootAccountId (): string {
+    return process.env.CHATWOOT_ACCOUNT_ID as string;
+  }
+
+  public getChatwootApiAdminKey (): string {
+    return process.env.CHATWOOT_API_ADMIN_KEY as string;
+  }
+
   public getDebugRecipientEnabled (): boolean {
     return (process.env.DEBUG_RECIPIENT_ENABLED as string) === 'true';
   }
