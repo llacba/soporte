@@ -116,7 +116,7 @@ export class LoggerWinston implements Logger {
         level: true
       }),
       format.printf(log => {
-        return `${ log.timestamp } ${ log.app_name }/v${ log.app_version }:${ log.app_port } ${ log.level }: ${ log.message }`;
+        return `${ log.timestamp } ${ log.app_name }:${ log.app_port } ${ log.level }: ${ log.message }`;
       })
     );
   }
