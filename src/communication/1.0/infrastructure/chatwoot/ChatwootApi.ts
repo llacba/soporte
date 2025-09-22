@@ -32,7 +32,9 @@ export class ChatwootApi {
 
     const chatwootEndpoint = `accounts/${ accountId }/teams`;
 
-    return await axiosInstance.get(chatwootEndpoint);
+    const response = await axiosInstance.get(chatwootEndpoint);
+
+    return response.data;
   }
 
   public async assignTeamToConversation (conversationId: number, teamId: number): Promise<void> {
@@ -40,7 +42,7 @@ export class ChatwootApi {
 
     const accountId = this.config.getChatwootAccountId();
 
-    const chatwootEndpoint = `accounts/${ accountId }/conversations/${ conversationId }/assign_team`;
+    const chatwootEndpoint = `accounts/${ accountId }/conversations/${ conversationId }/assignments`;
 
     const body = {
       team_id: teamId

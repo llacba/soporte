@@ -1,7 +1,9 @@
+import { AssignPhoneRegionData } from '@communication/domain/dto/AssignPhoneRegionData.js';
 import { Region } from '@communication/domain/dto/Region.js';
 import { REGION_NAMES } from '@communication/domain/type/RegionNames.js';
 import { DNI } from '@communication/domain/valueObject/DNI.js';
 import { Config } from '@core/Config.js';
+import { NotImplemented } from '@core/domain/error/NotImplemented.js';
 import { LOGGER, Logger } from '@core/domain/Logger.js';
 import { Nullable } from '@core/domain/type/Nullable.js';
 import { Phone } from '@core/domain/valueObject/Phone.js';
@@ -34,5 +36,9 @@ export class LLAApi {
     }
 
     return null;
+  }
+
+  public async createTicket (_data: AssignPhoneRegionData): Promise<void> {
+    throw new NotImplemented();
   }
 }

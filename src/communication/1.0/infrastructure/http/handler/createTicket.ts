@@ -1,4 +1,4 @@
-import { AssignPhoneRegion } from '@communication/application/AssignPhoneRegion.js';
+import { CreateTicket } from '@communication/application/CreateTicket.js';
 import { HTTP_SUCCESS_CODES } from '@core/domain/type/HttpCodes.js';
 import { Phone } from '@core/domain/valueObject/Phone.js';
 import { dependencyContainer } from '@src/dependencyContainer.js';
@@ -13,16 +13,16 @@ export default async (request: Request, response: Response, next: NextFunction):
     const conversationId = request.body.messages[0].conversation_id as number;
     const phone = new Phone(request.body.meta.sender.phone_number as string);
 
-    const assignPhoneRegion = dependencyContainer.get<AssignPhoneRegion>(AssignPhoneRegion);
+    const createTicket = dependencyContainer.get<CreateTicket>(CreateTicket);
 
-    await assignPhoneRegion.run({
+    await createTicket.run({
       contactId,
       conversationId,
       inboxId,
       phone
     });
 
-    response.status(HTTP_SUCCESS_CODES.OK).send('Phone region set successfully.');
+    response.status(HTTP_SUCCESS_CODES.OK).send('Ticket created successfully.');
   } catch (error) {
     next(error);
   }

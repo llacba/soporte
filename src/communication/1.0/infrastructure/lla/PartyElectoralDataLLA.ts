@@ -1,3 +1,4 @@
+import { AssignPhoneRegionData } from '@communication/domain/dto/AssignPhoneRegionData.js';
 import { Region } from '@communication/domain/dto/Region.js';
 import { PartyElectoralData } from '@communication/domain/PartyElectoralData.js';
 import { DNI } from '@communication/domain/valueObject/DNI.js';
@@ -22,5 +23,9 @@ export class PartyElectoralDataLLA implements PartyElectoralData {
 
   public async getRegionByPhone (phone: Phone): Promise<Nullable<Region>> {
     return await this.llaApi.getRegionByPhone(phone);
+  }
+
+  public async createTicket (data: AssignPhoneRegionData): Promise<void> {
+    await this.llaApi.createTicket(data);
   }
 }
