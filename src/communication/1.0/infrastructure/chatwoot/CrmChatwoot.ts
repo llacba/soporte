@@ -31,7 +31,7 @@ export class CrmChatwoot implements Crm {
   public async getTeamByName (name: TrimmedString): Promise<Region> {
     const teams = await this.chatwootApi.getTeamsList();
 
-    const team = teams.find(team => team.name === name.toPrimitives());
+    const team = teams.find(team => team.name.toLowerCase() === name.toPrimitives().toLowerCase());
 
     if (!team) {
       throw new NotFound(`Team with name ${ name.toPrimitives() }`);

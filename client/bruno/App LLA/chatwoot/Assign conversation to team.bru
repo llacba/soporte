@@ -1,0 +1,26 @@
+meta {
+  name: Assign conversation to team
+  type: http
+  seq: 7
+}
+
+post {
+  url: {{chatwootHost}}/api/v1/accounts/:accountId/conversations/:conversationId/assignments
+  body: json
+  auth: basic
+}
+
+params:path {
+  conversationId: 45
+  accountId: 2
+}
+
+headers {
+  api_access_token: 77X7m7BqAXzDvsdWARtZk9GP
+}
+
+body:json {
+  {
+    "team_id": 1
+  }
+}

@@ -1,0 +1,19 @@
+meta {
+  name: Get all teams
+  type: http
+  seq: 6
+}
+
+get {
+  url: {{chatwootHost}}/api/v1/accounts/:accountId/teams
+  body: none
+  auth: basic
+}
+
+params:path {
+  accountId: 2
+}
+
+headers {
+  api_access_token: 77X7m7BqAXzDvsdWARtZk9GP
+}
