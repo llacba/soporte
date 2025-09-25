@@ -10,8 +10,8 @@ import { HTTP_CLIENT_ERROR_CODES, HTTP_SERVER_ERROR_CODES } from '@core/domain/t
 import { NextFunction, Request, Response, Router } from 'express';
 import { glob } from 'glob';
 import { inject, injectable } from 'inversify';
-import path from 'path';
-import { pathToFileURL } from 'url';
+import path, { extname } from 'path';
+import { fileURLToPath, pathToFileURL } from 'url';
 
 @injectable()
 export class HttpRouterExpress implements HttpRouter {
@@ -79,7 +79,9 @@ export class HttpRouterExpress implements HttpRouter {
   }
 
   private async getRouters (): Promise<Array<HttpRouter>> {
-    const routerFiles = await glob('**/src/**/ModuleRouter.{js,ts}');
+    const currentFilename = fileURLToPath(import.meta.url);
+    const currentExtension = extname(currentFilename);
+    const routerFiles = await glob(`**/ModuleRouter${currentExtension}`);
 
     let routerList = [];
 
