@@ -1,0 +1,29 @@
+meta {
+  name: Set Region by DNI
+  type: http
+  seq: 6
+}
+
+post {
+  url: {{host}}/communication/set-region
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "id": 101,
+    "inbox_id": 7,
+    "messages": [
+      {
+        "content": "31647480"
+      }
+    ],
+    "meta": {
+      "sender": {
+        "id": 1,
+        "phone_number": "+5493516511912"
+      }
+    }
+  }
+}

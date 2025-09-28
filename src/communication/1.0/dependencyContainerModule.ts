@@ -1,4 +1,5 @@
-import { AssignPhoneRegion } from '@communication/application/AssignPhoneRegion.js';
+import { SetRegionByDNI } from '@communication/application/SetRegionByDNI.js';
+import { StartSupport } from '@communication/application/StartSupport.js';
 import { Subscribe } from '@communication/application/Subscribe.js';
 import { CRM, Crm } from '@communication/domain/Crm.js';
 import { PARTY_ELECTORAL_DATA, PartyElectoralData } from '@communication/domain/PartyElectoralData.js';
@@ -16,5 +17,6 @@ export default new ContainerModule((options: ContainerModuleLoadOptions) => {
   options.bind<LLAApi>(LLAApi).toSelf().inSingletonScope();
   options.bind<Crm>(CRM).to(CrmChatwoot);
   options.bind<Subscribe>(Subscribe).toSelf();
-  options.bind<AssignPhoneRegion>(AssignPhoneRegion).toSelf();
+  options.bind<StartSupport>(StartSupport).toSelf();
+  options.bind<SetRegionByDNI>(SetRegionByDNI).toSelf();
 });

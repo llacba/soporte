@@ -1,22 +1,19 @@
 meta {
-  name: Assign Phone Region
+  name: Confirm Support Request
   type: http
-  seq: 5
+  seq: 7
 }
 
 post {
-  url: {{host}}/communication/phone-region
+  url: {{host}}/communication/send-support-request-confirmation
   body: json
   auth: none
 }
 
 body:json {
   {
-    "id": 101,
-    "inbox_id": 7,
     "meta": {
       "sender": {
-        "id": 1,
         "phone_number": "+5493516511912"
       }
     }
