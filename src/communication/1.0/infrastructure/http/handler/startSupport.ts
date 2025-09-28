@@ -1,4 +1,4 @@
-import { AssignPhoneRegion } from '@communication/application/AssignPhoneRegion.js';
+import { StartSupport } from '@communication/application/StartSupport.js';
 import { HTTP_SUCCESS_CODES } from '@core/domain/type/HttpCodes.js';
 import { Phone } from '@core/domain/valueObject/Phone.js';
 import { dependencyContainer } from '@src/dependencyContainer.js';
@@ -13,16 +13,16 @@ export default async (request: Request, response: Response, next: NextFunction):
     const conversationId = request.body.messages[0].conversation_id as number;
     const phone = new Phone(request.body.meta.sender.phone_number as string);
 
-    const assignPhoneRegion = dependencyContainer.get<AssignPhoneRegion>(AssignPhoneRegion);
+    const startSupport = dependencyContainer.get<StartSupport>(StartSupport);
 
-    await assignPhoneRegion.run({
+    await startSupport.run({
       contactId,
       conversationId,
       inboxId,
       phone
     });
 
-    response.status(HTTP_SUCCESS_CODES.OK).send('Phone region set successfully.');
+    response.status(HTTP_SUCCESS_CODES.OK).send('Support request started successfully.');
   } catch (error) {
     next(error);
   }

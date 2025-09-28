@@ -1,7 +1,9 @@
-import assignPhoneRegion from '@communication/infrastructure/http/handler/assignPhoneRegion.js';
 import createTicket from '@communication/infrastructure/http/handler/createTicket.js';
 import sendEventsList from '@communication/infrastructure/http/handler/sendEventsList.js';
 import sendMessage from '@communication/infrastructure/http/handler/sendMessage.js';
+import sendSupportRequestConfirmation from '@communication/infrastructure/http/handler/sendSupportRequestConfirmation.js';
+import setRegionByDNI from '@communication/infrastructure/http/handler/setRegionByDNI.js';
+import startSupport from '@communication/infrastructure/http/handler/startSupport.js';
 import subscribe from '@communication/infrastructure/http/handler/subscribe.js';
 import { Config } from '@core/Config.js';
 import { HttpRouter } from '@core/domain/HttpRouter.js';
@@ -35,8 +37,10 @@ export class ModuleRouter implements HttpRouter {
     this.router.get('/', baseHandler(this.appName, this.moduleName));
     this.router.get('/subscribe', subscribe);
     this.router.post('/messages', sendMessage);
-    this.router.post('/phone-region', assignPhoneRegion);
+    this.router.post('/start-support', startSupport);
+    this.router.post('/set-region', setRegionByDNI);
     this.router.post('/send-events-list', sendEventsList);
+    this.router.post('/send-support-request-confirmation', sendSupportRequestConfirmation);
     this.router.post('/ticket', createTicket);
 
     return this.router;

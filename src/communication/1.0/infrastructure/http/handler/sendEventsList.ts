@@ -1,5 +1,4 @@
-import { SendMessageTemplate } from '@communication/infrastructure/whatsapp/SendMessageTemplate.js';
-import { WhatsAppData } from '@communication/infrastructure/whatsapp/WhatsAppData.js';
+import { SendEventsList } from '@communication/application/SendEventsList.js';
 import { HTTP_SUCCESS_CODES } from '@core/domain/type/HttpCodes.js';
 import { dependencyContainer } from '@src/dependencyContainer.js';
 import { NextFunction, Request, Response } from 'express';
@@ -8,19 +7,11 @@ export default async (request: Request, response: Response, next: NextFunction):
   try {
     const { phone_number } = request.body.meta.sender;
 
-    const sendMessageTemplate = dependencyContainer.get<SendMessageTemplate>(SendMessageTemplate);
+    const sendEventsList = dependencyContainer.get<SendEventsList>(SendEventsList);
 
-    const whatsAppData = new WhatsAppData({
-      targetPhoneNumber: phone_number as string,
-      templateData: {
-        components: [],
-        name: 'event_options'
-      }
-    });
+    await sendEventsList.run(phone_number);
 
-    await sendMessageTemplate.run(whatsAppData);
-
-    response.status(HTTP_SUCCESS_CODES.OK).send('Message sent successfully.');
+    response.status(HTTP_SUCCESS_CODES.OK).send('Events list sent successfully.');
   } catch (error) {
     next(error);
   }

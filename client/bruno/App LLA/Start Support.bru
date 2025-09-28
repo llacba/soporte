@@ -1,0 +1,24 @@
+meta {
+  name: Start Support
+  type: http
+  seq: 5
+}
+
+post {
+  url: {{host}}/communication/start-support
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "id": 101,
+    "inbox_id": 7,
+    "meta": {
+      "sender": {
+        "id": 1,
+        "phone_number": "+5493516511912"
+      }
+    }
+  }
+}
