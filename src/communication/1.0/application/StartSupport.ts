@@ -1,5 +1,6 @@
 import { CRM, Crm } from '@communication/domain/Crm.js';
 import { AssignPhoneRegionData } from '@communication/domain/dto/AssignPhoneRegionData.js';
+import { MESSAGE_SENDER, MessageSender } from '@communication/domain/MessageSender.js';
 import { PARTY_ELECTORAL_DATA, PartyElectoralData } from '@communication/domain/PartyElectoralData.js';
 import { Config } from '@core/Config.js';
 import { LOGGER, Logger } from '@core/domain/Logger.js';
@@ -11,6 +12,7 @@ export class StartSupport {
     @inject(Config) private config: Config,
     @inject(LOGGER) private logger: Logger,
     @inject(CRM) private crm: Crm,
+    @inject(MESSAGE_SENDER) private messageSender: MessageSender,
     @inject(PARTY_ELECTORAL_DATA) private partyElectoralData: PartyElectoralData
   ) {}
 
@@ -27,6 +29,6 @@ export class StartSupport {
 
     await this.crm.assignTeamToConversation(data.conversationId, team.id);
 
-    await this.crm.sendEventsList(data.phone);
+    await this.messageSender.sendEventsList(data.phone);
   }
 }
