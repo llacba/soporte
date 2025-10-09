@@ -1,22 +1,33 @@
+import { CreateTicket } from '@communication/application/CreateTicket.js';
+import { SendEventsList } from '@communication/application/SendEventsList.js';
+import { SendSupportRequestConfirmation } from '@communication/application/SendSupportRequestConfirmation.js';
+import { SendTextMessage } from '@communication/application/SendTextMessage.js';
 import { SetRegionByDNI } from '@communication/application/SetRegionByDNI.js';
 import { StartSupport } from '@communication/application/StartSupport.js';
 import { Subscribe } from '@communication/application/Subscribe.js';
 import { CRM, Crm } from '@communication/domain/Crm.js';
+import { MESSAGE_SENDER, MessageSender } from '@communication/domain/MessageSender.js';
 import { PARTY_ELECTORAL_DATA, PartyElectoralData } from '@communication/domain/PartyElectoralData.js';
 import { ChatwootApi } from '@communication/infrastructure/chatwoot/ChatwootApi.js';
 import { CrmChatwoot } from '@communication/infrastructure/chatwoot/CrmChatwoot.js';
 import { LLAApi } from '@communication/infrastructure/lla/LLAApi.js';
 import { PartyElectoralDataLLA } from '@communication/infrastructure/lla/PartyElectoralDataLLA.js';
-import { SendMessageTemplate } from '@communication/infrastructure/whatsapp/SendMessageTemplate.js';
+import { MessageSenderWhatsApp } from '@communication/infrastructure/whatsapp/MessageSenderWhatsApp.js';
+import { SendMessage } from '@communication/infrastructure/whatsapp/SendMessage.js';
 import { ContainerModule, ContainerModuleLoadOptions } from 'inversify';
 
 export default new ContainerModule((options: ContainerModuleLoadOptions) => {
-  options.bind<SendMessageTemplate>(SendMessageTemplate).toSelf();
+  options.bind<SendMessage>(SendMessage).toSelf();
   options.bind<ChatwootApi>(ChatwootApi).toSelf().inSingletonScope();
   options.bind<PartyElectoralData>(PARTY_ELECTORAL_DATA).to(PartyElectoralDataLLA);
   options.bind<LLAApi>(LLAApi).toSelf().inSingletonScope();
   options.bind<Crm>(CRM).to(CrmChatwoot);
+  options.bind<MessageSender>(MESSAGE_SENDER).to(MessageSenderWhatsApp);
   options.bind<Subscribe>(Subscribe).toSelf();
   options.bind<StartSupport>(StartSupport).toSelf();
   options.bind<SetRegionByDNI>(SetRegionByDNI).toSelf();
+  options.bind<SendEventsList>(SendEventsList).toSelf();
+  options.bind<SendSupportRequestConfirmation>(SendSupportRequestConfirmation).toSelf();
+  options.bind<SendTextMessage>(SendTextMessage).toSelf();
+  options.bind<CreateTicket>(CreateTicket).toSelf();
 });

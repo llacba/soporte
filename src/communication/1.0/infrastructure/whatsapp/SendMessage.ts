@@ -1,5 +1,4 @@
-import { WhatsAppBody } from '@communication/infrastructure/whatsapp/WhatsAppBody.js';
-import { WhatsAppData } from '@communication/infrastructure/whatsapp/WhatsAppData.js';
+import { WhatsAppBody } from '@communication/infrastructure/whatsapp/dto/WhatsAppBody.js';
 import { Config } from '@core/Config.js';
 import { ServerError } from '@core/domain/error/ServerError.js';
 import { Logger, LOGGER } from '@core/domain/Logger.js';
@@ -9,47 +8,36 @@ import axios from 'axios';
 import { inject, injectable } from 'inversify';
 
 @injectable()
-export class SendMessageTemplate {
+export class SendMessage {
   public constructor (
     @inject(Config) private config: Config,
     @inject(LOGGER) private logger: Logger
   ) {}
 
-  public async run (data: WhatsAppData): Promise<void> {
+  public async run (body: WhatsAppBody): Promise<void> {
     const metaGraphApiUrl = this.config.getMetaGraphApiUrl();
     const metaGraphApiVersion = this.config.getMetaGraphApiVersion();
     const fromPhoneNumberId = this.config.getMetaWhatsAppPhoneId();
     const token = `Bearer ${ this.config.getMetaWhatsAppAdminToken() }`;
 
     const metaApiUrl = `${ metaGraphApiUrl }/${ metaGraphApiVersion }/${ fromPhoneNumberId }/messages`;
-    const languageCode = this.config.getMetaWhatsAppEncoding();
 
-    const targetPhoneNumber = this.getRecipientPhone(data.targetPhoneNumber);
+    const targetPhoneNumber = this.getRecipientPhone(body.to);
 
-    const body: WhatsAppBody = {
-      'messaging_product': 'whatsapp',
-      'template': {
-        'language': {
-          'code': languageCode
-        },
-        'name': data.templateData.name.toPrimitives()
-      },
-      'to': targetPhoneNumber.toPrimitives().replace('+', ''),
-      'type': 'template'
+    const data = {
+      ...body.toPrimitives(),
+      to: targetPhoneNumber.toPrimitives()
     };
 
-    if (data.templateData.components.length) {
-      body.template.components = data.templateData.components;
-    }
-
     const response = await axios.post(metaApiUrl,
-      body,
+      data,
       {
         headers: {
           'Authorization': token,
           'Content-Type': 'application/json'
         }
-      });
+      }
+    );
 
     this.logger.debug('WhatsApp response', [response.data]);
 
@@ -59,7 +47,7 @@ export class SendMessageTemplate {
       return;
     }
 
-    throw new ServerError('Error sending WhatsApp message template.');
+    throw new ServerError(`Error sending WhatsApp message template. Error: ${ response.status } ${ response.statusText }`);
   }
 
   private getRecipientPhone (phone: Phone): Phone {

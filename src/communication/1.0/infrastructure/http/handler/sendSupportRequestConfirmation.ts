@@ -1,24 +1,17 @@
-import { SendMessageTemplate } from '@communication/infrastructure/whatsapp/SendMessageTemplate.js';
-import { WhatsAppData } from '@communication/infrastructure/whatsapp/WhatsAppData.js';
+import { SendSupportRequestConfirmation } from '@communication/application/SendSupportRequestConfirmation.js';
 import { HTTP_SUCCESS_CODES } from '@core/domain/type/HttpCodes.js';
+import { Phone } from '@core/domain/valueObject/Phone.js';
 import { dependencyContainer } from '@src/dependencyContainer.js';
 import { NextFunction, Request, Response } from 'express';
 
 export default async (request: Request, response: Response, next: NextFunction): Promise<void> => {
   try {
     const { phone_number } = request.body.meta.sender;
+    const phone = new Phone(phone_number);
 
-    const sendMessageTemplate = dependencyContainer.get<SendMessageTemplate>(SendMessageTemplate);
+    const sendSupportRequestConfirmation = dependencyContainer.get<SendSupportRequestConfirmation>(SendSupportRequestConfirmation);
 
-    const whatsAppData = new WhatsAppData({
-      targetPhoneNumber: phone_number as string,
-      templateData: {
-        components: [],
-        name: 'confirm_support_needed'
-      }
-    });
-
-    await sendMessageTemplate.run(whatsAppData);
+    await sendSupportRequestConfirmation.run(phone);
 
     response.status(HTTP_SUCCESS_CODES.OK).send('Message sent successfully.');
   } catch (error) {
