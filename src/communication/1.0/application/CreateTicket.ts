@@ -1,4 +1,4 @@
-import { AssignPhoneRegionData } from '@communication/domain/dto/AssignPhoneRegionData.js';
+import { CrmPayloadWithPhone } from '@communication/domain/dto/CrmPayloadWithPhone.js';
 import { PARTY_ELECTORAL_DATA, PartyElectoralData } from '@communication/domain/PartyElectoralData.js';
 import { Config } from '@core/Config.js';
 import { LOGGER, Logger } from '@core/domain/Logger.js';
@@ -11,7 +11,7 @@ export class CreateTicket {
     @inject(PARTY_ELECTORAL_DATA) private partyElectoralData: PartyElectoralData
   ) {}
 
-  public async run (data: AssignPhoneRegionData): Promise<void> {
-    await this.partyElectoralData.createTicket(data);
+  public async run (_payload: CrmPayloadWithPhone): Promise<void> {
+    // await this.partyElectoralData.createTicket(payload);
   }
 }

@@ -1,0 +1,23 @@
+meta {
+  name: Electoral Data
+  type: http
+  seq: 8
+}
+
+get {
+  url: https://resultados.mininterior.gob.ar/api/resultados/getResultados?anioEleccion=2023&tipoRecuento=1&tipoEleccion=2&categoriaId=1&distritoId=4&mesaId=2
+  body: none
+  auth: none
+}
+
+params:query {
+  anioEleccion: 2023
+  tipoRecuento: 1
+  tipoEleccion: 2
+  categoriaId: 1
+  distritoId: 4
+  mesaId: 2
+  ~seccionProvincialId: 0
+  ~seccionId: 3
+  ~circuitoId: 000039
+}

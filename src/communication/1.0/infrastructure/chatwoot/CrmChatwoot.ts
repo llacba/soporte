@@ -1,5 +1,5 @@
 import { Crm } from '@communication/domain/Crm.js';
-import { CrmSendMessageData } from '@communication/domain/dto/CrmSendMessageData.js';
+import { CrmPayload } from '@communication/domain/dto/CrmPayload.js';
 import { Region } from '@communication/domain/dto/Region.js';
 import { ChatwootApi } from '@communication/infrastructure/chatwoot/ChatwootApi.js';
 import { Config } from '@core/Config.js';
@@ -22,7 +22,7 @@ export class CrmChatwoot implements Crm {
     @inject(ChatwootApi) private chatwootApi: ChatwootApi
   ) {}
 
-  public async askForDNI (data: CrmSendMessageData): Promise<void> {
+  public async askForDNI (data: CrmPayload): Promise<void> {
     const message = new TrimmedString('Para poder continuar, ¿me compartís tu número de DNI por favor?');
 
     await this.chatwootApi.sendMessage(data, message);

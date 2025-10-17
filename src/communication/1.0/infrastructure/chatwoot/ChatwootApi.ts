@@ -1,4 +1,4 @@
-import { CrmSendMessageData } from '@communication/domain/dto/CrmSendMessageData.js';
+import { CrmPayload } from '@communication/domain/dto/CrmPayload.js';
 import { Region } from '@communication/domain/dto/Region.js';
 import { Config } from '@core/Config.js';
 import { LOGGER, Logger } from '@core/domain/Logger.js';
@@ -13,7 +13,7 @@ export class ChatwootApi {
     @inject(LOGGER) private logger: Logger
   ) {}
 
-  public async sendMessage (data: CrmSendMessageData, message: TrimmedString): Promise<void> {
+  public async sendMessage (data: CrmPayload, message: TrimmedString): Promise<void> {
     const axiosInstance = this.axiosConfig();
 
     const chatwootEndpoint = `inboxes/${ data.inboxId }/contacts/${ data.contactId }/conversations/${ data.conversationId }/messages`;

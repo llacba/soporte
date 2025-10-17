@@ -1,5 +1,5 @@
 import { CRM, Crm } from '@communication/domain/Crm.js';
-import { AssignDNIRegionData } from '@communication/domain/dto/AssignDNIRegionData.js';
+import { CrmPayloadWithPhoneAndDni } from '@communication/domain/dto/CrmPayloadWithPhoneAndDni.js';
 import { MESSAGE_SENDER, MessageSender } from '@communication/domain/MessageSender.js';
 import { PARTY_ELECTORAL_DATA, PartyElectoralData } from '@communication/domain/PartyElectoralData.js';
 import { Config } from '@core/Config.js';
@@ -17,19 +17,19 @@ export class SetRegionByDNI {
     @inject(PARTY_ELECTORAL_DATA) private partyElectoralData: PartyElectoralData
   ) {}
 
-  public async run (data: AssignDNIRegionData): Promise<void> {
-    const region = await this.partyElectoralData.getRegionByDni(data.dni);
+  public async run (payload: CrmPayloadWithPhoneAndDni): Promise<void> {
+    const region = await this.partyElectoralData.getRegionByDni(payload.dni);
 
     if (!region) {
-      await this.messageSender.sendAuditorNotFound(data.phone);
+      await this.messageSender.sendAuditorNotFound(payload.phone);
 
-      throw new NotFound(`Phone ${ data.phone.toPrimitives() } with DNI ${ data.dni.toPrimitives() } not found in Party Electoral Data`);
+      throw new NotFound(`Party Electoral Data: Phone ${ payload.phone.toPrimitives() } with DNI ${ payload.dni.toPrimitives() }`);
     }
 
     const team = await this.crm.getTeamByName(new TrimmedString(region.name));
 
-    await this.crm.assignTeamToConversation(data.conversationId, team.id);
+    await this.crm.assignTeamToConversation(payload.conversationId, team.id);
 
-    await this.messageSender.sendEventsList(data.phone);
+    await this.messageSender.sendEventsList(payload.phone);
   }
 }

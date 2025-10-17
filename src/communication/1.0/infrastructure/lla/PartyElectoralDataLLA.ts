@@ -1,7 +1,7 @@
-import { AssignPhoneRegionData } from '@communication/domain/dto/AssignPhoneRegionData.js';
 import { Region } from '@communication/domain/dto/Region.js';
 import { PartyElectoralData } from '@communication/domain/PartyElectoralData.js';
 import { DNI } from '@communication/domain/valueObject/DNI.js';
+import { Ticket } from '@communication/infrastructure/lla/dto/Ticket.js';
 import { LLAApi } from '@communication/infrastructure/lla/LLAApi.js';
 import { Config } from '@core/Config.js';
 import { LOGGER, Logger } from '@core/domain/Logger.js';
@@ -25,7 +25,7 @@ export class PartyElectoralDataLLA implements PartyElectoralData {
     return await this.llaApi.getRegionByPhone(phone);
   }
 
-  public async createTicket (data: AssignPhoneRegionData): Promise<void> {
-    await this.llaApi.createTicket(data);
+  public async createTicket (ticket: Ticket): Promise<void> {
+    await this.llaApi.createTicket(ticket);
   }
 }
