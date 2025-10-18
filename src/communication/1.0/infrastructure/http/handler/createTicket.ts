@@ -9,6 +9,7 @@ export default async (request: Request, response: Response, next: NextFunction):
     const inboxId = inbox_id as number;
     const contactId = id as number;
     const conversationId = request.body.messages[0].conversation_id as number;
+    // const message = request.body.messages[0].content as EVENTS;
     const phone = new Phone(request.body.meta.sender.phone_number as string);
 
     // const createTicket = dependencyContainer.get<CreateTicket>(CreateTicket);
@@ -17,6 +18,7 @@ export default async (request: Request, response: Response, next: NextFunction):
     //   contactId,
     //   conversationId,
     //   inboxId,
+    //   message,
     //   phone
     // });
 

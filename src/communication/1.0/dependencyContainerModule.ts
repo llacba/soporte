@@ -3,7 +3,7 @@ import { GetElectoralResults } from '@communication/application/GetElectoralResu
 import { SendEventsList } from '@communication/application/SendEventsList.js';
 import { SendSupportRequestConfirmation } from '@communication/application/SendSupportRequestConfirmation.js';
 import { SendTextMessage } from '@communication/application/SendTextMessage.js';
-import { SetRegionByDNI } from '@communication/application/SetRegionByDNI.js';
+import { SetRegionByDni } from '@communication/application/SetRegionByDni.js';
 import { StartSupport } from '@communication/application/StartSupport.js';
 import { Subscribe } from '@communication/application/Subscribe.js';
 import { CRM, Crm } from '@communication/domain/Crm.js';
@@ -29,7 +29,7 @@ export default new ContainerModule((options: ContainerModuleLoadOptions) => {
   options.bind<GetElectoralResults>(GetElectoralResults).toSelf();
   options.bind<Subscribe>(Subscribe).toSelf();
   options.bind<StartSupport>(StartSupport).toSelf();
-  options.bind<SetRegionByDNI>(SetRegionByDNI).toSelf();
+  options.bind<SetRegionByDni>(SetRegionByDni).toSelf();
   options.bind<SendEventsList>(SendEventsList).toSelf();
   options.bind<SendSupportRequestConfirmation>(SendSupportRequestConfirmation).toSelf();
   options.bind<SendTextMessage>(SendTextMessage).toSelf();

@@ -8,7 +8,7 @@ import { LOGGER, Logger } from '@core/domain/Logger.js';
 import { TrimmedString } from '@core/domain/valueObject/TrimmedString.js';
 import { inject } from 'inversify';
 
-export class SetRegionByDNI {
+export class SetRegionByDni {
   public constructor (
     @inject(Config) private config: Config,
     @inject(LOGGER) private logger: Logger,

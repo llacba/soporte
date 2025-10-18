@@ -1,4 +1,5 @@
 import { Region } from '@communication/domain/dto/Region.js';
+import { EVENTS } from '@communication/domain/type/Events.js';
 import { TICKET_STATUSES } from '@communication/domain/type/TicketStatus.js';
 import { DNI } from '@communication/domain/valueObject/DNI.js';
 import { Ticket } from '@communication/infrastructure/lla/dto/Ticket.js';
@@ -43,6 +44,22 @@ LIMIT 1;`;
       id: rows[0].idBloque,
       name: rows[0].nombreBloque
     });
+  }
+
+  public async getCategoryIdByName (eventName: EVENTS): Promise<Nullable<number>> {
+    const database = await this.getDatabase();
+
+    const queryString = `SELECT ci.idCategoria, ci.nombreCategoria FROM "${ this.databaseName }"."CategoriasIncidencias" ci
+WHERE ci.nombreCategoria = '${ eventName }'
+LIMIT 1;`;
+
+    const { rows } = await database.query(queryString);
+
+    if (rows.length === 0) {
+      return null;
+    }
+
+    return rows[0].idCategoria;
   }
 
   public async getRegionByPhone (phone: Phone): Promise<Nullable<Region>> {

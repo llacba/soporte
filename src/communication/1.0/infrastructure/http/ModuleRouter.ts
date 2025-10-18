@@ -3,7 +3,7 @@ import getElectoralResults from '@communication/infrastructure/http/handler/getE
 import sendEventsList from '@communication/infrastructure/http/handler/sendEventsList.js';
 import sendMessage from '@communication/infrastructure/http/handler/sendMessage.js';
 import sendSupportRequestConfirmation from '@communication/infrastructure/http/handler/sendSupportRequestConfirmation.js';
-import setRegionByDNI from '@communication/infrastructure/http/handler/setRegionByDNI.js';
+import setRegionByDni from '@communication/infrastructure/http/handler/setRegionByDni.js';
 import startSupport from '@communication/infrastructure/http/handler/startSupport.js';
 import subscribe from '@communication/infrastructure/http/handler/subscribe.js';
 import { Config } from '@core/Config.js';
@@ -40,7 +40,7 @@ export class ModuleRouter implements HttpRouter {
     this.router.get('/get-electoral-results', getElectoralResults);
     this.router.post('/messages', sendMessage);
     this.router.post('/start-support', startSupport);
-    this.router.post('/set-region', setRegionByDNI);
+    this.router.post('/set-region', setRegionByDni);
     this.router.post('/send-events-list', sendEventsList);
     this.router.post('/send-support-request-confirmation', sendSupportRequestConfirmation);
     this.router.post('/ticket', createTicket);
