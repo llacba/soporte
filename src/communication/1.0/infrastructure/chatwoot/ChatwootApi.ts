@@ -77,7 +77,7 @@ export class ChatwootApi {
       baseURL: this.config.getChatwootApiUrl(),
       headers: {
         'api_access_token': chatwootApiKey,
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json; charset=utf-8'
       }
     });
   }
