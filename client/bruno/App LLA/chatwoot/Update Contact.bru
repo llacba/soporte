@@ -1,0 +1,31 @@
+meta {
+  name: Update Contact
+  type: http
+  seq: 3
+}
+
+put {
+  url: {{chatwootHost}}/api/v1/accounts/:accountId/contacts/:contactId
+  body: json
+  auth: bearer
+}
+
+params:path {
+  contactId: 1
+  accountId: 1
+}
+
+headers {
+  api_access_token: {{chatwootApiToken}}
+}
+
+body:json {
+  {
+    "custom_attributes": {
+      "contact_id": 2,
+      "department": "CAPITAL",
+      "region": "Grupo A"
+    },
+    "email": "danielarturomassara@gmail.com"
+  }
+}
