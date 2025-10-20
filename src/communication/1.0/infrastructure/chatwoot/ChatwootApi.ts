@@ -64,8 +64,7 @@ export class ChatwootApi {
         contact_id: contact.id,
         department: contact.department ? contact.department.name.toPrimitives() : null,
         region: contact.region ? contact.region.name : null
-      },
-      email: contact.email ? contact.email.toPrimitives() : null
+      }
     };
 
     await axiosInstance.put(chatwootEndpoint, body);
