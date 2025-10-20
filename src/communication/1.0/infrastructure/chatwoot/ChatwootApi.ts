@@ -63,11 +63,13 @@ export class ChatwootApi {
       custom_attributes: {
         contact_id: contact.id,
         department: contact.department ? contact.department.name.toPrimitives() : null,
-        region: contact.region ? String(contact.region.name) : null
+        region: contact.region ? contact.region.name : null
       }
     };
 
-    await axiosInstance.put(chatwootEndpoint, body);
+    const response = await axiosInstance.put(chatwootEndpoint, JSON.stringify(body));
+
+    this.logger.info(JSON.stringify(response.data));
   }
 
   private axiosConfig (): AxiosInstance {
