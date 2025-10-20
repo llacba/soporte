@@ -14,7 +14,7 @@ export default async (request: Request, response: Response, next: NextFunction):
     const conversationId = request.body.messages[0].conversation_id as number;
     const message = new DNI(request.body.messages[0].content as string);
     const phone = new Phone(request.body.meta.sender.phone_number as string);
-    const { contact_id, department } = request.body.meta.sender.custom_attributes;
+    const { contact_id, department, region } = request.body.meta.sender.custom_attributes;
 
     const setRegionByDni = dependencyContainer.get<SetRegionByDni>(SetRegionByDni);
 
@@ -23,7 +23,8 @@ export default async (request: Request, response: Response, next: NextFunction):
       crmContactId,
       customAttributes: {
         contactId: contact_id,
-        department
+        department,
+        region
       },
       dni: message,
       inboxId,

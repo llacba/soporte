@@ -26,12 +26,12 @@ export default new ContainerModule((options: ContainerModuleLoadOptions) => {
   options.bind<DineApi>(DineApi).toSelf().inSingletonScope();
   options.bind<Crm>(CRM).to(CrmChatwoot);
   options.bind<MessageSender>(MESSAGE_SENDER).to(MessageSenderWhatsApp);
+  options.bind<CreateTicket>(CreateTicket).toSelf();
   options.bind<GetElectoralResults>(GetElectoralResults).toSelf();
-  options.bind<Subscribe>(Subscribe).toSelf();
-  options.bind<StartSupport>(StartSupport).toSelf();
-  options.bind<SetRegionByDni>(SetRegionByDni).toSelf();
   options.bind<SendEventsList>(SendEventsList).toSelf();
   options.bind<SendSupportRequestConfirmation>(SendSupportRequestConfirmation).toSelf();
   options.bind<SendTextMessage>(SendTextMessage).toSelf();
-  options.bind<CreateTicket>(CreateTicket).toSelf();
+  options.bind<SetRegionByDni>(SetRegionByDni).toSelf();
+  options.bind<StartSupport>(StartSupport).toSelf();
+  options.bind<Subscribe>(Subscribe).toSelf();
 });
