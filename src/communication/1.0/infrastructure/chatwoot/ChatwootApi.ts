@@ -59,12 +59,15 @@ export class ChatwootApi {
 
     const chatwootEndpoint = `accounts/${ accountId }/contacts/${ contact.id }`;
 
+    const attributes = {
+      contact_id: contact.id,
+      department: contact.department ? contact.department.name.toPrimitives() : null,
+      region: contact.region ? contact.region.name : null
+    };
+
     const body = {
-      custom_attributes: {
-        contact_id: contact.id,
-        department: contact.department ? contact.department.name.toPrimitives() : null,
-        region: contact.region ? contact.region.name : null
-      }
+      additional_attributes: attributes,
+      custom_attributes: attributes
     };
 
     await axiosInstance.put(chatwootEndpoint, body);
