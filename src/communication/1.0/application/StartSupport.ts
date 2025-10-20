@@ -37,6 +37,8 @@ export class StartSupport {
       return;
     }
 
+    await this.crm.updateContactData(contact);
+
     const team = await this.crm.getTeamByName(new TrimmedString(contact.region.name));
 
     await this.crm.assignTeamToConversation(payload.conversationId, team.id);
