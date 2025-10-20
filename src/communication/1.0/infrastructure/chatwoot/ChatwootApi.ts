@@ -76,6 +76,7 @@ export class ChatwootApi {
     return axios.create({
       baseURL: this.config.getChatwootApiUrl(),
       headers: {
+        'Accept': 'application/json',
         'api_access_token': chatwootApiKey,
         'Content-Type': 'application/json; charset=utf-8'
       }
