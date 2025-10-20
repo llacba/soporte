@@ -25,14 +25,14 @@ export class LLAApi {
   public async getContactByDni (dni: DNI): Promise<Nullable<Contact>> {
     const database = await this.getDatabase();
 
-    const queryString = `SELECT u.idUsuario as id, u.apellido as lastName, u.nombre as firstName, u.email as email, u.telefono as phone, u.dni as dni, d.idDepartamento as department.id, d.descripcion as department.name, bt.idBloque as region.id, bt.nombreBloque as region.name
-FROM "${ this.databaseName }"."Usuario" u
-LEFT JOIN "${ this.databaseName }"."usuario_rol_alcance" ura ON ura.usuario_id = u."idUsuario"
-LEFT JOIN "${ this.databaseName }"."Escuelas" e ON e."idEscuela" = ura."idEscuela"
-LEFT JOIN "${ this.databaseName }"."CircuitoElectoral" c ON c."idCircuito" = e."idCircuito"
-LEFT JOIN "${ this.databaseName }"."Departamento" d ON d."idDepartamento" = c."idDepartamento"
-LEFT JOIN "${ this.databaseName }"."BloqueTerritorial" bt ON bt.idBloque = d.idBloque
-WHERE u.dni = '${ dni.toPrimitives() }'
+    const queryString = `SELECT u."idUsuario" as "id", u."apellido" as "lastName", u."nombre" as "firstName", u."email" as "email", u."telefono" as "phone", u."dni" as "dni", d."idDepartamento" as "departmentId", d."descripcion" as "departmentName", bt.idBloque as "regionId", bt.nombreBloque as "regionName"
+FROM ${ this.databaseName }."Usuario" u
+LEFT JOIN ${ this.databaseName }."usuario_rol_alcance" ura ON ura."usuario_id" = u."idUsuario"
+LEFT JOIN ${ this.databaseName }."Escuelas" e ON e."idEscuela" = ura."idEscuela"
+LEFT JOIN ${ this.databaseName }."CircuitoElectoral" c ON c."idCircuito" = e."idCircuito"
+LEFT JOIN ${ this.databaseName }."Departamento" d ON d."idDepartamento" = c."idDepartamento"
+LEFT JOIN ${ this.databaseName }."BloqueTerritorial" bt ON bt.idBloque = d.idBloque
+WHERE u."dni" = '${ dni.toPrimitives() }'
 LIMIT 1;`;
 
     const { rows } = await database.query(queryString);
@@ -80,14 +80,14 @@ LIMIT 1;`;
 
     const parsedPhone = phone.toPrimitives().replace('+549', '');
 
-    const queryString = `SELECT u.idUsuario as id, u.apellido as lastName, u.nombre as firstName, u.email as email, u.telefono as phone, u.dni as dni, d.idDepartamento as department.id, d.descripcion as department.name, bt.idBloque as region.id, bt.nombreBloque as region.name
-FROM "${ this.databaseName }"."Usuario" u
-LEFT JOIN "${ this.databaseName }"."usuario_rol_alcance" ura ON ura.usuario_id = u."idUsuario"
-LEFT JOIN "${ this.databaseName }"."Escuelas" e ON e."idEscuela" = ura."idEscuela"
-LEFT JOIN "${ this.databaseName }"."CircuitoElectoral" c ON c."idCircuito" = e."idCircuito"
-LEFT JOIN "${ this.databaseName }"."Departamento" d ON d."idDepartamento" = c."idDepartamento"
-LEFT JOIN "${ this.databaseName }"."BloqueTerritorial" bt ON bt.idBloque = d.idBloque
-WHERE u.telefono = '${ parsedPhone }'
+    const queryString = `SELECT u."idUsuario" as "id", u."apellido" as "lastName", u."nombre" as "firstName", u."email" as "email", u."telefono" as "phone", u."dni" as "dni", d."idDepartamento" as "departmentId", d."descripcion" as "departmentName", bt.idBloque as "regionId", bt.nombreBloque as "regionName"
+FROM ${ this.databaseName }."Usuario" u
+LEFT JOIN ${ this.databaseName }."usuario_rol_alcance" ura ON ura."usuario_id" = u."idUsuario"
+LEFT JOIN ${ this.databaseName }."Escuelas" e ON e."idEscuela" = ura."idEscuela"
+LEFT JOIN ${ this.databaseName }."CircuitoElectoral" c ON c."idCircuito" = e."idCircuito"
+LEFT JOIN ${ this.databaseName }."Departamento" d ON d."idDepartamento" = c."idDepartamento"
+LEFT JOIN ${ this.databaseName }."BloqueTerritorial" bt ON bt.idBloque = d.idBloque
+WHERE u."telefono" = '${ parsedPhone }'
 LIMIT 1;`;
 
     const { rows } = await database.query(queryString);
