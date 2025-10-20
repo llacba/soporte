@@ -60,7 +60,7 @@ export class ChatwootApi {
     const chatwootEndpoint = `accounts/${ accountId }/contacts/${ contact.id }`;
 
     const body = {
-      custom_attributes: {
+      additional_attributes: {
         contact_id: contact.id,
         department: contact.department ? contact.department.name.toPrimitives() : null,
         region: contact.region ? contact.region.name : null
