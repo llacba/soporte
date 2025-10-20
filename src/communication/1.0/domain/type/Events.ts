@@ -1,5 +1,7 @@
 export enum HIGH_PRIORITY_EVENTS {
-  CONTACT_COORDINATOR = 'Contacto coordinador'
+  CONTACT_COORDINATOR = 'Contacto coordinador',
+  MISSING_AUDITORS = 'Faltan fiscales',
+  REPLACEMENT_REQUESTED = 'Necesito reemplazo'
 }
 
 export enum LOW_PRIORITY_EVENTS {
@@ -15,9 +17,4 @@ export enum MEDIUM_PRIORITY_EVENTS {
   SCHOOL_PROBLEMS = 'Problemas en escuela'
 }
 
-export enum URGENT_PRIORITY_EVENTS {
-  MISSING_AUDITORS = 'Faltan fiscales',
-  REPLACEMENT_REQUESTED = 'Necesito reemplazo'
-}
-
-export type EVENTS = HIGH_PRIORITY_EVENTS | LOW_PRIORITY_EVENTS | MEDIUM_PRIORITY_EVENTS | URGENT_PRIORITY_EVENTS;
+export type EVENTS = HIGH_PRIORITY_EVENTS | LOW_PRIORITY_EVENTS | MEDIUM_PRIORITY_EVENTS;

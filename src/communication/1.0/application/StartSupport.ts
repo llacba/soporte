@@ -17,9 +17,19 @@ export class StartSupport {
   ) {}
 
   public async run (payload: CrmPayloadWithPhone): Promise<void> {
-    const region = await this.partyElectoralData.getRegionByPhone(payload.phone);
+    if (payload.customAttributes && payload.customAttributes.region) {
+      const team = await this.crm.getTeamByName(new TrimmedString(payload.customAttributes.region));
 
-    if (!region) {
+      await this.crm.assignTeamToConversation(payload.conversationId, team.id);
+
+      await this.messageSender.sendEventsList(payload.phone);
+
+      return;
+    }
+
+    const contact = await this.partyElectoralData.getContactByPhone(payload.phone);
+
+    if (!contact) {
       this.logger.warning(`Party Electoral Data: Phone ${ payload.phone.toPrimitives() } not found.`);
 
       await this.crm.askForDNI(payload);
@@ -27,7 +37,7 @@ export class StartSupport {
       return;
     }
 
-    const team = await this.crm.getTeamByName(new TrimmedString(region.name));
+    const team = await this.crm.getTeamByName(new TrimmedString(contact.region.name));
 
     await this.crm.assignTeamToConversation(payload.conversationId, team.id);
 

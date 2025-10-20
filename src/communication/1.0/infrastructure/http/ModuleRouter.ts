@@ -1,5 +1,4 @@
 import createTicket from '@communication/infrastructure/http/handler/createTicket.js';
-import getElectoralResults from '@communication/infrastructure/http/handler/getElectoralResults.js';
 import sendEventsList from '@communication/infrastructure/http/handler/sendEventsList.js';
 import sendMessage from '@communication/infrastructure/http/handler/sendMessage.js';
 import sendSupportRequestConfirmation from '@communication/infrastructure/http/handler/sendSupportRequestConfirmation.js';
@@ -37,7 +36,7 @@ export class ModuleRouter implements HttpRouter {
   public async registerRoutes (): Promise<Router> {
     this.router.get('/', baseHandler(this.appName, this.moduleName));
     this.router.get('/subscribe', subscribe);
-    this.router.get('/get-electoral-results', getElectoralResults);
+    // this.router.get('/get-electoral-results', getElectoralResults);
     this.router.post('/messages', sendMessage);
     this.router.post('/start-support', startSupport);
     this.router.post('/set-region', setRegionByDni);

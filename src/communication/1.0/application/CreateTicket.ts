@@ -28,7 +28,7 @@ export class CreateTicket {
       details: payload.message,
       status: TICKET_STATUSES.PENDING,
       updatedAt: new Date(),
-      userId: payload.userId ? payload.userId : undefined
+      userId: payload.customAttributes ? payload.customAttributes.contactId : undefined
     });
 
     await this.partyElectoralData.createTicket(ticket);

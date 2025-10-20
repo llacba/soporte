@@ -1,9 +1,8 @@
-import { Nullable } from '@core/domain/type/Nullable.js';
+import { CrmContactCustomAttributes } from '@communication/domain/dto/CrmContactCustomAttributes.js';
 
 export interface CrmPayload {
-  contactId: number;
   conversationId: number;
   crmContactId: number;
+  customAttributes?: CrmContactCustomAttributes;
   inboxId: number;
-  userId?: Nullable<number>;
 }

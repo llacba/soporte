@@ -1,4 +1,4 @@
-import { Region } from '@communication/domain/dto/Region.js';
+import { Contact } from '@communication/domain/dto/Contact.js';
 import { PartyElectoralData } from '@communication/domain/PartyElectoralData.js';
 import { EVENTS } from '@communication/domain/type/Events.js';
 import { DNI } from '@communication/domain/valueObject/DNI.js';
@@ -18,12 +18,12 @@ export class PartyElectoralDataLLA implements PartyElectoralData {
     @inject(LLAApi) private llaApi: LLAApi
   ) {}
 
-  public async getRegionByDni (dni: DNI): Promise<Nullable<Region>> {
-    return await this.llaApi.getRegionByDni(dni);
+  public async getContactByDni (dni: DNI): Promise<Nullable<Contact>> {
+    return await this.llaApi.getContactByDni(dni);
   }
 
-  public async getRegionByPhone (phone: Phone): Promise<Nullable<Region>> {
-    return await this.llaApi.getRegionByPhone(phone);
+  public async getContactByPhone (phone: Phone): Promise<Nullable<Contact>> {
+    return await this.llaApi.getContactByPhone(phone);
   }
 
   public async getCategoryIdByName (eventName: EVENTS): Promise<Nullable<number>> {

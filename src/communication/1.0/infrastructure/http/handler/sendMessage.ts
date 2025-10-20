@@ -15,7 +15,7 @@ export default async (request: Request, response: Response, next: NextFunction):
 
     await sendTextMessage.run(messageBody, phone);
 
-    response.status(HTTP_SUCCESS_CODES.OK).send('Message sent successfully.');
+    response.status(HTTP_SUCCESS_CODES.OK).send(`Message sent successfully to phone ${ phone }.`);
   } catch (error) {
     next(error);
   }

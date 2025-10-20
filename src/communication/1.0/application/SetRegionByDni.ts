@@ -18,15 +18,17 @@ export class SetRegionByDni {
   ) {}
 
   public async run (payload: CrmPayloadWithPhoneAndDni): Promise<void> {
-    const region = await this.partyElectoralData.getRegionByDni(payload.dni);
+    const contact = await this.partyElectoralData.getContactByDni(payload.dni);
 
-    if (!region) {
+    if (!contact) {
       await this.messageSender.sendAuditorNotFound(payload.phone);
 
-      throw new NotFound(`Party Electoral Data: Phone ${ payload.phone.toPrimitives() } with DNI ${ payload.dni.toPrimitives() }`);
+      throw new NotFound(`Party Electoral Data: Contact with Phone ${ payload.phone.toPrimitives() } and DNI ${ payload.dni.toPrimitives() }`);
     }
 
-    const team = await this.crm.getTeamByName(new TrimmedString(region.name));
+    const team = await this.crm.getTeamByName(new TrimmedString(contact.region.name));
+
+    await this.crm.updateContactData(contact);
 
     await this.crm.assignTeamToConversation(payload.conversationId, team.id);
 

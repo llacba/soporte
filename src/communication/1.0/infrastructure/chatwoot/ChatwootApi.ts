@@ -1,3 +1,4 @@
+import { Contact } from '@communication/domain/dto/Contact.js';
 import { CrmPayload } from '@communication/domain/dto/CrmPayload.js';
 import { Region } from '@communication/domain/dto/Region.js';
 import { Config } from '@core/Config.js';
@@ -16,7 +17,7 @@ export class ChatwootApi {
   public async sendMessage (data: CrmPayload, message: TrimmedString): Promise<void> {
     const axiosInstance = this.axiosConfig();
 
-    const chatwootEndpoint = `inboxes/${ data.inboxId }/contacts/${ data.contactId }/conversations/${ data.conversationId }/messages`;
+    const chatwootEndpoint = `inboxes/${ data.inboxId }/contacts/${ data.crmContactId }/conversations/${ data.conversationId }/messages`;
 
     const body = {
       content: message.toPrimitives()
@@ -49,6 +50,25 @@ export class ChatwootApi {
     };
 
     await axiosInstance.post(chatwootEndpoint, body);
+  }
+
+  public async updateContactData (contact: Contact): Promise<void> {
+    const axiosInstance = this.axiosConfig();
+
+    const accountId = this.config.getChatwootAccountId();
+
+    const chatwootEndpoint = `accounts/${ accountId }/contacts/${ contact.id }`;
+
+    const body = {
+      custom_attributes: {
+        contactId: contact.id,
+        department: contact.department ? contact.department.name.toPrimitives() : null,
+        region: contact.region ? contact.region.name : null
+      },
+      email: contact.email ? contact.email.toPrimitives() : null
+    };
+
+    await axiosInstance.put(chatwootEndpoint, body);
   }
 
   private axiosConfig (): AxiosInstance {

@@ -1,4 +1,5 @@
 import { Crm } from '@communication/domain/Crm.js';
+import { Contact } from '@communication/domain/dto/Contact.js';
 import { CrmPayload } from '@communication/domain/dto/CrmPayload.js';
 import { Region } from '@communication/domain/dto/Region.js';
 import { ChatwootApi } from '@communication/infrastructure/chatwoot/ChatwootApi.js';
@@ -31,7 +32,7 @@ export class CrmChatwoot implements Crm {
   public async getTeamByName (name: TrimmedString): Promise<Region> {
     const teams = await this.chatwootApi.getTeamsList();
 
-    const team = teams.find(team => team.name.toLowerCase() === name.toPrimitives().toLowerCase());
+    const team = teams.find(team => name.toPrimitives().toLowerCase().startsWith(team.name.toLowerCase(), 0));
 
     if (!team) {
       throw new NotFound(`Team with name ${ name.toPrimitives() }`);
@@ -42,5 +43,9 @@ export class CrmChatwoot implements Crm {
 
   public async assignTeamToConversation (conversationId: number, region: number): Promise<void> {
     await this.chatwootApi.assignTeamToConversation(conversationId, region);
+  }
+
+  public async updateContactData (contact: Contact): Promise<void> {
+    await this.chatwootApi.updateContactData(contact);
   }
 }

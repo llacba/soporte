@@ -1,4 +1,4 @@
-import { Region } from '@communication/domain/dto/Region.js';
+import { Contact } from '@communication/domain/dto/Contact.js';
 import { EVENTS } from '@communication/domain/type/Events.js';
 import { TICKET_STATUSES } from '@communication/domain/type/TicketStatus.js';
 import { DNI } from '@communication/domain/valueObject/DNI.js';
@@ -22,15 +22,16 @@ export class LLAApi {
     this.databaseName = 'dev';
   }
 
-  public async getRegionByDni (dni: DNI): Promise<Nullable<Region>> {
+  public async getContactByDni (dni: DNI): Promise<Nullable<Contact>> {
     const database = await this.getDatabase();
 
-    const queryString = `SELECT bt.idBloque, bt.nombreBloque FROM "${ this.databaseName }"."Usuario" u
-LEFT JOIN "${ this.databaseName }"."FiscalGeneral" fg ON u.idUsuario = fg.idUsuario
-LEFT JOIN "${ this.databaseName }"."Escuelas" e ON fg.idEscuela = e.idEscuela
-LEFT JOIN "${ this.databaseName }"."CircuitoElectoral" ce ON e.idCircuito = ce.idCircuito
-LEFT JOIN "${ this.databaseName }"."Departamento" d ON ce.idDepartamento = d.idDepartamento
-LEFT JOIN "${ this.databaseName }"."BloqueTerritorial" bt ON d.idBloque = bt.idBloque
+    const queryString = `SELECT u.idUsuario as id, u.apellido as lastName, u.nombre as firstName, u.email as email, u.telefono as phone, u.dni as dni, d.idDepartamento as department.id, d.descripcion as department.name, bt.idBloque as region.id, bt.nombreBloque as region.name
+FROM "${ this.databaseName }"."Usuario" u
+LEFT JOIN "${ this.databaseName }"."usuario_rol_alcance" ura ON ura.usuario_id = u."idUsuario"
+LEFT JOIN "${ this.databaseName }"."Escuelas" e ON e."idEscuela" = ura."idEscuela"
+LEFT JOIN "${ this.databaseName }"."CircuitoElectoral" c ON c."idCircuito" = e."idCircuito"
+LEFT JOIN "${ this.databaseName }"."Departamento" d ON d."idDepartamento" = c."idDepartamento"
+LEFT JOIN "${ this.databaseName }"."BloqueTerritorial" bt ON bt.idBloque = d.idBloque
 WHERE u.dni = '${ dni.toPrimitives() }'
 LIMIT 1;`;
 
@@ -40,9 +41,21 @@ LIMIT 1;`;
       return null;
     }
 
-    return new Region({
-      id: rows[0].idBloque,
-      name: rows[0].nombreBloque
+    return new Contact({
+      department: {
+        id: rows[0].departmentId,
+        name: rows[0].departmentName
+      },
+      dni: rows[0].dni,
+      email: rows[0].email,
+      firstName: rows[0].firstName,
+      id: rows[0].id,
+      lastName: rows[0].lastName,
+      phone: rows[0].phone,
+      region: {
+        id: rows[0].regionId,
+        name: rows[0].regionName
+      }
     });
   }
 
@@ -62,17 +75,18 @@ LIMIT 1;`;
     return rows[0].idCategoria;
   }
 
-  public async getRegionByPhone (phone: Phone): Promise<Nullable<Region>> {
+  public async getContactByPhone (phone: Phone): Promise<Nullable<Contact>> {
     const database = await this.getDatabase();
 
     const parsedPhone = phone.toPrimitives().replace('+549', '');
 
-    const queryString = `SELECT bt.idBloque, bt.nombreBloque FROM "${ this.databaseName }"."Usuario" u
-LEFT JOIN "${ this.databaseName }"."FiscalGeneral" fg ON u.idUsuario = fg.idUsuario
-LEFT JOIN "${ this.databaseName }"."Escuelas" e ON fg.idEscuela = e.idEscuela
-LEFT JOIN "${ this.databaseName }"."CircuitoElectoral" ce ON e.idCircuito = ce.idCircuito
-LEFT JOIN "${ this.databaseName }"."Departamento" d ON ce.idDepartamento = d.idDepartamento
-LEFT JOIN "${ this.databaseName }"."BloqueTerritorial" bt ON d.idBloque = bt.idBloque
+    const queryString = `SELECT u.idUsuario as id, u.apellido as lastName, u.nombre as firstName, u.email as email, u.telefono as phone, u.dni as dni, d.idDepartamento as department.id, d.descripcion as department.name, bt.idBloque as region.id, bt.nombreBloque as region.name
+FROM "${ this.databaseName }"."Usuario" u
+LEFT JOIN "${ this.databaseName }"."usuario_rol_alcance" ura ON ura.usuario_id = u."idUsuario"
+LEFT JOIN "${ this.databaseName }"."Escuelas" e ON e."idEscuela" = ura."idEscuela"
+LEFT JOIN "${ this.databaseName }"."CircuitoElectoral" c ON c."idCircuito" = e."idCircuito"
+LEFT JOIN "${ this.databaseName }"."Departamento" d ON d."idDepartamento" = c."idDepartamento"
+LEFT JOIN "${ this.databaseName }"."BloqueTerritorial" bt ON bt.idBloque = d.idBloque
 WHERE u.telefono = '${ parsedPhone }'
 LIMIT 1;`;
 
@@ -82,9 +96,21 @@ LIMIT 1;`;
       return null;
     }
 
-    return new Region({
-      id: rows[0].idBloque,
-      name: rows[0].nombreBloque
+    return new Contact({
+      department: {
+        id: rows[0].departmentId,
+        name: rows[0].departmentName
+      },
+      dni: rows[0].dni,
+      email: rows[0].email,
+      firstName: rows[0].firstName,
+      id: rows[0].id,
+      lastName: rows[0].lastName,
+      phone: rows[0].phone,
+      region: {
+        id: rows[0].regionId,
+        name: rows[0].regionName
+      }
     });
   }
 
