@@ -60,7 +60,7 @@
     "dev": "tsx watch src/index.ts",
     "lint": "eslint ./src",
     "lint-fix": "eslint './src' --fix",
-    "prebuild": "rm -rf dist && npm run lint",
+    "prebuild": "rm -rf dist && npm run lint-fix",
     "seeder": "tsx ./src/cli.ts",
     "start": "node --experimental-specifier-resolution=node './dist/index.js'",
     "test": "mocha",
