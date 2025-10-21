@@ -5,6 +5,7 @@ import { formatDateTime } from '@core/application/date.js';
 import { Config } from '@core/Config.js';
 import { NotFound } from '@core/domain/error/NotFound.js';
 import { LOGGER, Logger } from '@core/domain/Logger.js';
+import { Nullable } from '@core/domain/type/Nullable.js';
 import { TrimmedString } from '@core/domain/valueObject/TrimmedString.js';
 import { inject } from 'inversify';
 
@@ -15,7 +16,7 @@ export class ReopenTicket {
     @inject(PARTY_ELECTORAL_DATA) private partyElectoralData: PartyElectoralData
   ) {}
 
-  public async run (conversationId: number, agent: Agent): Promise<void> {
+  public async run (conversationId: number, agent: Nullable<Agent>): Promise<void> {
     const ticket = await this.partyElectoralData.getTicketByConversationId(conversationId);
 
     if (!ticket) {

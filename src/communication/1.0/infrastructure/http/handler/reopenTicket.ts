@@ -7,7 +7,7 @@ import { NextFunction, Request, Response } from 'express';
 export default async (request: Request, response: Response, next: NextFunction): Promise<void> => {
   try {
     const conversationId = request.body.messages[0].conversation_id as number;
-    const agent = new Agent(request.body.meta.assignee);
+    const agent = request.body.meta.assignee ? new Agent(request.body.meta.assignee) : null;
 
     const reopenTicket = dependencyContainer.get<ReopenTicket>(ReopenTicket);
 
