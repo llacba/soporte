@@ -1,4 +1,6 @@
+import assignAgentToTicket from '@communication/infrastructure/http/handler/assignAgentToTicket.js';
 import createTicket from '@communication/infrastructure/http/handler/createTicket.js';
+import resolveTicket from '@communication/infrastructure/http/handler/resolveTicket.js';
 import sendEventsList from '@communication/infrastructure/http/handler/sendEventsList.js';
 import sendMessage from '@communication/infrastructure/http/handler/sendMessage.js';
 import sendSupportRequestConfirmation from '@communication/infrastructure/http/handler/sendSupportRequestConfirmation.js';
@@ -42,7 +44,9 @@ export class ModuleRouter implements HttpRouter {
     this.router.post('/set-region', setRegionByDni);
     this.router.post('/send-events-list', sendEventsList);
     this.router.post('/send-support-request-confirmation', sendSupportRequestConfirmation);
-    this.router.post('/ticket', createTicket);
+    this.router.post('/tickets/create', createTicket);
+    this.router.post('/tickets/assign', assignAgentToTicket);
+    this.router.post('/tickets/resolve', resolveTicket);
 
     return this.router;
   }

@@ -25,11 +25,14 @@ export class CreateTicket {
       throw new InvalidArgument(`No se encontró el evento ${ payload.message }.`);
     }
 
+    const newTicketDetails = `Conversación: [${ payload.conversationId }]
+${ payload.message }`;
+
     const ticket = new Ticket({
       categoryId: categoryId,
       createdAt: new Date(),
       crmContactId: payload.crmContactId,
-      details: payload.message,
+      details: newTicketDetails,
       status: TICKET_STATUSES.PENDING,
       updatedAt: new Date(),
       userId: payload.customAttributes.contactId

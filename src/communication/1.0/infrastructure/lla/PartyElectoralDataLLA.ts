@@ -33,4 +33,16 @@ export class PartyElectoralDataLLA implements PartyElectoralData {
   public async createTicket (ticket: Ticket): Promise<void> {
     await this.llaApi.createTicket(ticket);
   }
+
+  public async getTicketByConversationId (conversationId: number): Promise<Nullable<Ticket>> {
+    return await this.llaApi.getTicketByConversationId(conversationId);
+  }
+
+  public async assignAgentToTicket (ticket: Ticket): Promise<void> {
+    await this.llaApi.assignAgentToTicket(ticket);
+  }
+
+  public async resolveTicket (ticket: Ticket): Promise<void> {
+    await this.llaApi.resolveTicket(ticket);
+  }
 }

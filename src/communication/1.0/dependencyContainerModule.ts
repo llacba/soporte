@@ -1,5 +1,7 @@
+import { AssignAgentToTicket } from '@communication/application/AssignAgentToTicket.js';
 import { CreateTicket } from '@communication/application/CreateTicket.js';
 import { GetElectoralResults } from '@communication/application/GetElectoralResults.js';
+import { ResolveTicket } from '@communication/application/ResolveTicket.js';
 import { SendEventsList } from '@communication/application/SendEventsList.js';
 import { SendSupportRequestConfirmation } from '@communication/application/SendSupportRequestConfirmation.js';
 import { SendTextMessage } from '@communication/application/SendTextMessage.js';
@@ -26,8 +28,10 @@ export default new ContainerModule((options: ContainerModuleLoadOptions) => {
   options.bind<DineApi>(DineApi).toSelf().inSingletonScope();
   options.bind<Crm>(CRM).to(CrmChatwoot);
   options.bind<MessageSender>(MESSAGE_SENDER).to(MessageSenderWhatsApp);
+  options.bind<AssignAgentToTicket>(AssignAgentToTicket).toSelf();
   options.bind<CreateTicket>(CreateTicket).toSelf();
   options.bind<GetElectoralResults>(GetElectoralResults).toSelf();
+  options.bind<ResolveTicket>(ResolveTicket).toSelf();
   options.bind<SendEventsList>(SendEventsList).toSelf();
   options.bind<SendSupportRequestConfirmation>(SendSupportRequestConfirmation).toSelf();
   options.bind<SendTextMessage>(SendTextMessage).toSelf();

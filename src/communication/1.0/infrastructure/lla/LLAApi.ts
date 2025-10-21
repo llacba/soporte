@@ -134,7 +134,50 @@ VALUES (
   NOW()
 );`;
 
-    this.logger.info(`Creating ticket with query: ${ queryString }`);
+    await database.query(queryString);
+  }
+
+  public async getTicketByConversationId (conversationId: number): Promise<Ticket> {
+    const database = await this.getDatabase();
+
+    const queryString = `SELECT i.*
+FROM ${ this.databaseName }."Incidencias" i
+WHERE i."observaciones" LIKE 'Conversación: [${ conversationId }]%'
+LIMIT 1;`;
+
+    const { rows } = await database.query(queryString);
+
+    return new Ticket({
+      categoryId: rows[0].idCategoria,
+      createdAt: rows[0].fechaCreacion,
+      details: rows[0].observaciones,
+      id: rows[0].idTicket,
+      status: rows[0].estado,
+      updatedAt: rows[0].ultimaActualizacion,
+      userId: rows[0].idUsuario
+    });
+  }
+
+  public async assignAgentToTicket (ticket: Ticket): Promise<void> {
+    const database = await this.getDatabase();
+
+    const queryString = `UPDATE ${ this.databaseName }."Incidencias"
+SET "estado" = '${ TICKET_STATUSES.ASSIGNED }',
+"observaciones" = '${ ticket.details.toPrimitives() }',
+"ultimaActualizacion" = NOW()
+WHERE id = ${ ticket.id };`;
+
+    await database.query(queryString);
+  }
+
+  public async resolveTicket (ticket: Ticket): Promise<void> {
+    const database = await this.getDatabase();
+
+    const queryString = `UPDATE ${ this.databaseName }."Incidencias"
+SET "observaciones" = '${ ticket.details.toPrimitives() }',
+SET "estado" = '${ ticket.status }',
+"ultimaActualizacion" = NOW()
+WHERE id = ${ ticket.id };`;
 
     await database.query(queryString);
   }
