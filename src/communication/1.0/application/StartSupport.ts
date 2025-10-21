@@ -17,6 +17,8 @@ export class StartSupport {
   ) {}
 
   public async run (payload: CrmPayloadWithPhone): Promise<void> {
+    this.logger.info(JSON.stringify(payload, null, 2));
+
     if (payload.customAttributes && payload.customAttributes.region) {
       const team = await this.crm.getTeamByName(new TrimmedString(payload.customAttributes.region));
 
