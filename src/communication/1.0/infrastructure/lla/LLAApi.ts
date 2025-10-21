@@ -199,6 +199,7 @@ WHERE "idTicket" = ${ ticket.id };`;
 
     const queryString = `UPDATE ${ this.databaseName }."Incidencias"
 SET "observaciones" = '${ ticket.details.toPrimitives() }',
+"estado" = '${ ticket.status }',
 "ultimaActualizacion" = NOW()
 WHERE "idTicket" = ${ ticket.id };`;
 
