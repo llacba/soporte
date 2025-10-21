@@ -45,7 +45,7 @@ export class CrmChatwoot implements Crm {
     await this.chatwootApi.assignTeamToConversation(conversationId, region);
   }
 
-  public async updateContactData (contact: Contact): Promise<void> {
-    await this.chatwootApi.updateContactData(contact);
+  public async updateContactData (crmContactId: number, contact: Contact): Promise<void> {
+    await this.chatwootApi.updateContactData(crmContactId, contact);
   }
 }
