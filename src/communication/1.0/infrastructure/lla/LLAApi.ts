@@ -165,7 +165,7 @@ LIMIT 1;`;
 SET "estado" = '${ TICKET_STATUSES.ASSIGNED }',
 "observaciones" = '${ ticket.details.toPrimitives() }',
 "ultimaActualizacion" = NOW()
-WHERE id = ${ ticket.id };`;
+WHERE idTicket = ${ ticket.id };`;
 
     await database.query(queryString);
   }
@@ -177,7 +177,7 @@ WHERE id = ${ ticket.id };`;
 SET "observaciones" = '${ ticket.details.toPrimitives() }',
 SET "estado" = '${ ticket.status }',
 "ultimaActualizacion" = NOW()
-WHERE id = ${ ticket.id };`;
+WHERE idTicket = ${ ticket.id };`;
 
     await database.query(queryString);
   }
