@@ -37,7 +37,7 @@ export class StartSupport {
       return;
     }
 
-    await this.crm.updateContactData(contact);
+    await this.crm.updateContactData(payload.crmContactId, contact);
 
     const team = await this.crm.getTeamByName(new TrimmedString(contact.region.name));
 

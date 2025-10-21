@@ -28,7 +28,7 @@ export class SetRegionByDni {
 
     const team = await this.crm.getTeamByName(new TrimmedString(contact.region.name));
 
-    await this.crm.updateContactData(contact);
+    await this.crm.updateContactData(payload.crmContactId, contact);
 
     await this.crm.assignTeamToConversation(payload.conversationId, team.id);
 

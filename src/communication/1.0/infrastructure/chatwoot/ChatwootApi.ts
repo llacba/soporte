@@ -52,12 +52,12 @@ export class ChatwootApi {
     await axiosInstance.post(chatwootEndpoint, body);
   }
 
-  public async updateContactData (contact: Contact): Promise<void> {
+  public async updateContactData (contactId: number, contact: Contact): Promise<void> {
     const axiosInstance = this.axiosConfig();
 
     const accountId = this.config.getChatwootAccountId();
 
-    const chatwootEndpoint = `accounts/${ accountId }/contacts/${ contact.id }`;
+    const chatwootEndpoint = `accounts/${ accountId }/contacts/${ contactId }`;
 
     const body = JSON.stringify({
       custom_attributes: {
