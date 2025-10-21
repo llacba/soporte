@@ -128,8 +128,8 @@ LIMIT 1;`;
 VALUES (
   ${ ticket.userId },
   ${ ticket.categoryId },
-  "${ TICKET_STATUSES.PENDING }",
-  "${ ticket.details.toPrimitives() }",
+  '${ TICKET_STATUSES.PENDING }',
+  '${ ticket.details.toPrimitives() }',
   NOW(),
   NOW()
 );`;
