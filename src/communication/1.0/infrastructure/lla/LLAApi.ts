@@ -140,7 +140,7 @@ VALUES (
   public async getTicketByConversationId (conversationId: number): Promise<Ticket> {
     const database = await this.getDatabase();
 
-    const queryString = `SELECT i.*
+    const queryString = `SELECT i."idCategoria", i."fechaCreacion", i."observaciones", i."idTicket", i."estado", i."ultimaActualizacion", i."idUsuario"
 FROM ${ this.databaseName }."Incidencias" i
 WHERE i."observaciones" LIKE 'Conversación: [${ conversationId }]%'
 LIMIT 1;`;
