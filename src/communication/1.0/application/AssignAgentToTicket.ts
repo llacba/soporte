@@ -1,5 +1,6 @@
 import { CrmPayloadWithPhoneAndAssignedAgent } from '@communication/domain/dto/CrmPayloadWithPhoneAndAssignedAgent.js';
 import { PARTY_ELECTORAL_DATA, PartyElectoralData } from '@communication/domain/PartyElectoralData.js';
+import { formatDateTime } from '@core/application/date.js';
 import { Config } from '@core/Config.js';
 import { InvalidArgument } from '@core/domain/error/InvalidArgument.js';
 import { NotFound } from '@core/domain/error/NotFound.js';
@@ -26,7 +27,7 @@ export class AssignAgentToTicket {
     }
 
     ticket.details = new TrimmedString(`${ ticket.details.toPrimitives() }
-${ new Date().toString() } - Asignado a ${ payload.agent.name.toPrimitives() }.`);
+${ formatDateTime(new Date()) } - Asignado a ${ payload.agent.name.toPrimitives() }.`);
 
     await this.partyElectoralData.assignAgentToTicket(ticket);
   }

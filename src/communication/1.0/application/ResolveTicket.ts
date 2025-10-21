@@ -1,5 +1,6 @@
 import { PARTY_ELECTORAL_DATA, PartyElectoralData } from '@communication/domain/PartyElectoralData.js';
 import { TICKET_STATUSES } from '@communication/domain/type/TicketStatus.js';
+import { formatDateTime } from '@core/application/date.js';
 import { Config } from '@core/Config.js';
 import { NotFound } from '@core/domain/error/NotFound.js';
 import { LOGGER, Logger } from '@core/domain/Logger.js';
@@ -22,7 +23,7 @@ export class ResolveTicket {
 
     ticket.status = TICKET_STATUSES.RESOLVED;
     ticket.details = new TrimmedString(`${ ticket.details.toPrimitives() }
-${ new Date().toString() } - Resuelto.`);
+${ formatDateTime(new Date()) } - Resuelto.`);
 
     await this.partyElectoralData.resolveTicket(ticket);
   }
