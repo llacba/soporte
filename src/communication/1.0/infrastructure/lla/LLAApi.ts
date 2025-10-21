@@ -117,7 +117,7 @@ LIMIT 1;`;
   public async createTicket (ticket: Ticket): Promise<void> {
     const database = await this.getDatabase();
 
-    const queryString = `INSERT INTO "${ this.databaseName }"."Incidencias"(
+    const queryString = `INSERT INTO ${ this.databaseName }."Incidencias"(
   "idUsuario",
   "idCategoria",
   "estado",
@@ -126,7 +126,7 @@ LIMIT 1;`;
   "ultimaActualizacion"
 )
 VALUES (
-  ${ ticket.crmContactId },
+  ${ ticket.userId },
   ${ ticket.categoryId },
   ${ TICKET_STATUSES.PENDING },
   ${ ticket.details },
