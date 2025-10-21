@@ -137,7 +137,7 @@ VALUES (
     await database.query(queryString);
   }
 
-  public async getTicketByConversationId (conversationId: number): Promise<Ticket> {
+  public async getTicketByConversationId (conversationId: number): Promise<Nullable<Ticket>> {
     const database = await this.getDatabase();
 
     const queryString = `SELECT i."idCategoria", i."fechaCreacion", i."observaciones", i."idTicket", i."estado", i."ultimaActualizacion", i."idUsuario"
@@ -146,6 +146,10 @@ WHERE i."observaciones" LIKE 'Conversación: [${ conversationId }]%'
 LIMIT 1;`;
 
     const { rows } = await database.query(queryString);
+
+    if (rows.length === 0) {
+      return null;
+    }
 
     return new Ticket({
       categoryId: rows[0].idCategoria,
