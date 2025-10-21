@@ -45,4 +45,8 @@ export class PartyElectoralDataLLA implements PartyElectoralData {
   public async resolveTicket (ticket: Ticket): Promise<void> {
     await this.llaApi.resolveTicket(ticket);
   }
+
+  public async unassignTicket (ticket: Ticket): Promise<void> {
+    await this.llaApi.unassignTicket(ticket);
+  }
 }

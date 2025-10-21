@@ -8,6 +8,7 @@ import { SendTextMessage } from '@communication/application/SendTextMessage.js';
 import { SetRegionByDni } from '@communication/application/SetRegionByDni.js';
 import { StartSupport } from '@communication/application/StartSupport.js';
 import { Subscribe } from '@communication/application/Subscribe.js';
+import { UnassignTicket } from '@communication/application/UnassignTicket.js';
 import { CRM, Crm } from '@communication/domain/Crm.js';
 import { MESSAGE_SENDER, MessageSender } from '@communication/domain/MessageSender.js';
 import { PARTY_ELECTORAL_DATA, PartyElectoralData } from '@communication/domain/PartyElectoralData.js';
@@ -38,4 +39,5 @@ export default new ContainerModule((options: ContainerModuleLoadOptions) => {
   options.bind<SetRegionByDni>(SetRegionByDni).toSelf();
   options.bind<StartSupport>(StartSupport).toSelf();
   options.bind<Subscribe>(Subscribe).toSelf();
+  options.bind<UnassignTicket>(UnassignTicket).toSelf();
 });

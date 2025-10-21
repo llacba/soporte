@@ -182,6 +182,17 @@ WHERE "idTicket" = ${ ticket.id };`;
     await database.query(queryString);
   }
 
+  public async unassignTicket (ticket: Ticket): Promise<void> {
+    const database = await this.getDatabase();
+
+    const queryString = `UPDATE ${ this.databaseName }."Incidencias"
+SET "observaciones" = '${ ticket.details.toPrimitives() }',
+"ultimaActualizacion" = NOW()
+WHERE "idTicket" = ${ ticket.id };`;
+
+    await database.query(queryString);
+  }
+
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   public async saveElectoralResults (electoralTableId: number, result: any): Promise<void> {
     const scrutinyId = await this.saveScrutinyReport(electoralTableId, result);

@@ -13,6 +13,7 @@ export interface PartyElectoralData {
   getContactByPhone (phone: Phone): Promise<Nullable<Contact>>
   getTicketByConversationId (conversationId: number): Promise<Nullable<Ticket>>
   resolveTicket (ticket: Ticket): Promise<void>
+  unassignTicket (ticket: Ticket): Promise<void>
 }
 
 export const PARTY_ELECTORAL_DATA = Symbol.for('PartyElectoralData');

@@ -7,6 +7,7 @@ import sendSupportRequestConfirmation from '@communication/infrastructure/http/h
 import setRegionByDni from '@communication/infrastructure/http/handler/setRegionByDni.js';
 import startSupport from '@communication/infrastructure/http/handler/startSupport.js';
 import subscribe from '@communication/infrastructure/http/handler/subscribe.js';
+import unassignTicket from '@communication/infrastructure/http/handler/unassignTicket.js';
 import { Config } from '@core/Config.js';
 import { HttpRouter } from '@core/domain/HttpRouter.js';
 import { Logger, LOGGER } from '@core/domain/Logger.js';
@@ -47,6 +48,7 @@ export class ModuleRouter implements HttpRouter {
     this.router.post('/tickets/create', createTicket);
     this.router.post('/tickets/assign', assignAgentToTicket);
     this.router.post('/tickets/resolve', resolveTicket);
+    this.router.post('/tickets/unassign', unassignTicket);
 
     return this.router;
   }
