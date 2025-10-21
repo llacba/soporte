@@ -59,21 +59,15 @@ export class ChatwootApi {
 
     const chatwootEndpoint = `accounts/${ accountId }/contacts/${ contactId }`;
 
-    const body = JSON.stringify({
+    const body = {
       custom_attributes: {
         contact_id: contact.id,
         department: contact.department ? contact.department.name.toPrimitives() : null,
         region: contact.region ? contact.region.name : null
       }
-    });
+    };
 
-    const response = await axiosInstance.put(chatwootEndpoint, body, {
-      headers: {
-        ...(axiosInstance.defaults.headers as Record<string, string>),
-        'Content-Length': Buffer.byteLength(body).toString()
-      },
-      transformRequest: [(d): typeof d => d]
-    });
+    const response = await axiosInstance.put(chatwootEndpoint, body);
 
     this.logger.info(JSON.stringify(response.data));
   }
@@ -84,7 +78,6 @@ export class ChatwootApi {
     return axios.create({
       baseURL: this.config.getChatwootApiUrl(),
       headers: {
-        'Accept': 'application/json',
         'api_access_token': chatwootApiKey,
         'Content-Type': 'application/json; charset=utf-8'
       }
