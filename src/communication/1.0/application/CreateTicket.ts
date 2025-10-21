@@ -15,6 +15,10 @@ export class CreateTicket {
   ) {}
 
   public async run (payload: CrmPayloadWithPhoneAndEvent): Promise<void> {
+    if (!payload.customAttributes || !payload.customAttributes.contactId) {
+      throw new InvalidArgument('Falta ID de Usuario.');
+    }
+
     const categoryId = await this.partyElectoralData.getCategoryIdByName(payload.message);
 
     if (!categoryId) {
@@ -28,7 +32,7 @@ export class CreateTicket {
       details: payload.message,
       status: TICKET_STATUSES.PENDING,
       updatedAt: new Date(),
-      userId: payload.customAttributes ? payload.customAttributes.contactId : undefined
+      userId: payload.customAttributes.contactId
     });
 
     await this.partyElectoralData.createTicket(ticket);

@@ -1,5 +1,4 @@
 import { TICKET_STATUSES } from '@communication/domain/type/TicketStatus.js';
-import { Nullable } from '@core/domain/type/Nullable.js';
 import { TrimmedString } from '@core/domain/valueObject/TrimmedString.js';
 
 export interface TicketPrimitives {
@@ -10,7 +9,7 @@ export interface TicketPrimitives {
   id?: number;
   status: TICKET_STATUSES;
   updatedAt: Date;
-  userId?: Nullable<number>;
+  userId: number;
 }
 
 export class Ticket {
@@ -21,7 +20,7 @@ export class Ticket {
   public id?: number;
   public status: TICKET_STATUSES;
   public updatedAt: Date;
-  public userId?: Nullable<number>;
+  public userId: number;
 
   public constructor (primitives: TicketPrimitives) {
     this.categoryId = primitives.categoryId;
@@ -30,7 +29,7 @@ export class Ticket {
     this.id = primitives.id;
     this.status = primitives.status;
     this.updatedAt = primitives.updatedAt;
-    this.userId = primitives.userId ? primitives.userId : undefined;
+    this.userId = primitives.userId;
     this.crmContactId = primitives.crmContactId;
   }
 
@@ -43,7 +42,7 @@ export class Ticket {
       id: this.id,
       status: this.status,
       updatedAt: this.updatedAt,
-      userId: this.userId ? this.userId : undefined
+      userId: this.userId
     };
   }
 }

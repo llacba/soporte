@@ -134,6 +134,8 @@ VALUES (
   NOW()
 );`;
 
+    this.logger.info(`Creating ticket with query: ${ queryString }`);
+
     await database.query(queryString);
   }
 
