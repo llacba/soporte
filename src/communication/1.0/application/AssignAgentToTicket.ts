@@ -26,7 +26,7 @@ export class AssignAgentToTicket {
     }
 
     ticket.details = new TrimmedString(`${ ticket.details.toPrimitives() }
-${ new Date().toString() } - Asignado a ${ payload.agent.name }.`);
+${ new Date().toString() } - Asignado a ${ payload.agent.name.toPrimitives() }.`);
 
     await this.partyElectoralData.assignAgentToTicket(ticket);
   }
