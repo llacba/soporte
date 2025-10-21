@@ -12,6 +12,7 @@ export interface PartyElectoralData {
   getContactByDni (dni: DNI): Promise<Nullable<Contact>>
   getContactByPhone (phone: Phone): Promise<Nullable<Contact>>
   getTicketByConversationId (conversationId: number): Promise<Nullable<Ticket>>
+  reopenTicket (ticket: Ticket): Promise<void>
   resolveTicket (ticket: Ticket): Promise<void>
   unassignTicket (ticket: Ticket): Promise<void>
 }

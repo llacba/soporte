@@ -1,6 +1,7 @@
 import { AssignAgentToTicket } from '@communication/application/AssignAgentToTicket.js';
 import { CreateTicket } from '@communication/application/CreateTicket.js';
 import { GetElectoralResults } from '@communication/application/GetElectoralResults.js';
+import { ReopenTicket } from '@communication/application/ReopenTicket.js';
 import { ResolveTicket } from '@communication/application/ResolveTicket.js';
 import { SendEventsList } from '@communication/application/SendEventsList.js';
 import { SendSupportRequestConfirmation } from '@communication/application/SendSupportRequestConfirmation.js';
@@ -32,6 +33,7 @@ export default new ContainerModule((options: ContainerModuleLoadOptions) => {
   options.bind<AssignAgentToTicket>(AssignAgentToTicket).toSelf();
   options.bind<CreateTicket>(CreateTicket).toSelf();
   options.bind<GetElectoralResults>(GetElectoralResults).toSelf();
+  options.bind<ReopenTicket>(ReopenTicket).toSelf();
   options.bind<ResolveTicket>(ResolveTicket).toSelf();
   options.bind<SendEventsList>(SendEventsList).toSelf();
   options.bind<SendSupportRequestConfirmation>(SendSupportRequestConfirmation).toSelf();

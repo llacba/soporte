@@ -1,5 +1,6 @@
 import assignAgentToTicket from '@communication/infrastructure/http/handler/assignAgentToTicket.js';
 import createTicket from '@communication/infrastructure/http/handler/createTicket.js';
+import reopenTicket from '@communication/infrastructure/http/handler/reopenTicket.js';
 import resolveTicket from '@communication/infrastructure/http/handler/resolveTicket.js';
 import sendEventsList from '@communication/infrastructure/http/handler/sendEventsList.js';
 import sendMessage from '@communication/infrastructure/http/handler/sendMessage.js';
@@ -48,6 +49,7 @@ export class ModuleRouter implements HttpRouter {
     this.router.post('/tickets/create', createTicket);
     this.router.post('/tickets/assign', assignAgentToTicket);
     this.router.post('/tickets/resolve', resolveTicket);
+    this.router.post('/tickets/reopen', reopenTicket);
     this.router.post('/tickets/unassign', unassignTicket);
 
     return this.router;

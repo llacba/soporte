@@ -170,6 +170,18 @@ WHERE "idTicket" = ${ ticket.id };`;
     await database.query(queryString);
   }
 
+  public async reopenTicket (ticket: Ticket): Promise<void> {
+    const database = await this.getDatabase();
+
+    const queryString = `UPDATE ${ this.databaseName }."Incidencias"
+SET "observaciones" = '${ ticket.details.toPrimitives() }',
+"estado" = '${ ticket.status }',
+"ultimaActualizacion" = NOW()
+WHERE "idTicket" = ${ ticket.id };`;
+
+    await database.query(queryString);
+  }
+
   public async resolveTicket (ticket: Ticket): Promise<void> {
     const database = await this.getDatabase();
 
