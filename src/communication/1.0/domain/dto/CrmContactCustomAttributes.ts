@@ -4,5 +4,6 @@ import { Nullable } from '@core/domain/type/Nullable.js';
 export interface CrmContactCustomAttributes {
   contactId?: Nullable<number>;
   department?: Nullable<string>;
+  phoneNotFound?: Nullable<boolean>;
   region?: Nullable<REGION_NAMES>;
 }

@@ -32,6 +32,8 @@ export class StartSupport {
     if (!contact) {
       this.logger.warning(`Party Electoral Data: Phone ${ payload.phone.toPrimitives() } not found.`);
 
+      await this.crm.setPhoneNotFound(payload.crmContactId);
+
       await this.crm.askForDNI(payload);
 
       return;

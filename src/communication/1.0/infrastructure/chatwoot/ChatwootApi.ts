@@ -63,7 +63,24 @@ export class ChatwootApi {
       custom_attributes: {
         contact_id: contact.id,
         department: contact.department ? contact.department.name.toPrimitives() : null,
+        phone_not_found: false,
         region: contact.region ? contact.region.name : null
+      }
+    };
+
+    await axiosInstance.put(chatwootEndpoint, body);
+  }
+
+  public async setPhoneNotFound (crmContactId: number): Promise<void> {
+    const axiosInstance = this.axiosConfig();
+
+    const accountId = this.config.getChatwootAccountId();
+
+    const chatwootEndpoint = `accounts/${ accountId }/contacts/${ crmContactId }`;
+
+    const body = {
+      custom_attributes: {
+        phone_not_found: true
       }
     };
 

@@ -48,4 +48,8 @@ export class CrmChatwoot implements Crm {
   public async updateContactData (crmContactId: number, contact: Contact): Promise<void> {
     await this.chatwootApi.updateContactData(crmContactId, contact);
   }
+
+  public async setPhoneNotFound (crmContactId: number): Promise<void> {
+    await this.chatwootApi.setPhoneNotFound(crmContactId);
+  }
 }

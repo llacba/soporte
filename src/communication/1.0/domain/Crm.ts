@@ -7,6 +7,7 @@ export interface Crm {
   askForDNI (data: CrmPayload): Promise<void>
   assignTeamToConversation (conversationId: number, teamId: number): Promise<void>
   getTeamByName (name: TrimmedString): Promise<Region>
+  setPhoneNotFound (crmContactId: number): Promise<void>
   updateContactData (crmContactId: number, contact: Contact): Promise<void>
 }
 
