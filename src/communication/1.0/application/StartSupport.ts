@@ -1,5 +1,5 @@
 import { CRM, Crm } from '@communication/domain/Crm.js';
-import { AssignPhoneRegionData } from '@communication/domain/dto/AssignPhoneRegionData.js';
+import { CrmPayloadWithPhone } from '@communication/domain/dto/CrmPayloadWithPhone.js';
 import { MESSAGE_SENDER, MessageSender } from '@communication/domain/MessageSender.js';
 import { PARTY_ELECTORAL_DATA, PartyElectoralData } from '@communication/domain/PartyElectoralData.js';
 import { Config } from '@core/Config.js';
@@ -16,19 +16,33 @@ export class StartSupport {
     @inject(PARTY_ELECTORAL_DATA) private partyElectoralData: PartyElectoralData
   ) {}
 
-  public async run (data: AssignPhoneRegionData): Promise<void> {
-    const region = await this.partyElectoralData.getRegionByPhone(data.phone);
+  public async run (payload: CrmPayloadWithPhone): Promise<void> {
+    if (payload.customAttributes && payload.customAttributes.region) {
+      const team = await this.crm.getTeamByName(new TrimmedString(payload.customAttributes.region));
 
-    if (!region) {
-      await this.crm.askForDNI(data);
+      await this.crm.assignTeamToConversation(payload.conversationId, team.id);
+
+      await this.messageSender.sendEventsList(payload.phone);
 
       return;
     }
 
-    const team = await this.crm.getTeamByName(new TrimmedString(region.name));
+    const contact = await this.partyElectoralData.getContactByPhone(payload.phone);
 
-    await this.crm.assignTeamToConversation(data.conversationId, team.id);
+    if (!contact) {
+      this.logger.warning(`Party Electoral Data: Phone ${ payload.phone.toPrimitives() } not found.`);
 
-    await this.messageSender.sendEventsList(data.phone);
+      await this.crm.askForDNI(payload);
+
+      return;
+    }
+
+    await this.crm.updateContactData(payload.crmContactId, contact);
+
+    const team = await this.crm.getTeamByName(new TrimmedString(contact.region.name));
+
+    await this.crm.assignTeamToConversation(payload.conversationId, team.id);
+
+    await this.messageSender.sendEventsList(payload.phone);
   }
 }

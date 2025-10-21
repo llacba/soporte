@@ -1,10 +1,14 @@
+import assignAgentToTicket from '@communication/infrastructure/http/handler/assignAgentToTicket.js';
 import createTicket from '@communication/infrastructure/http/handler/createTicket.js';
+import reopenTicket from '@communication/infrastructure/http/handler/reopenTicket.js';
+import resolveTicket from '@communication/infrastructure/http/handler/resolveTicket.js';
 import sendEventsList from '@communication/infrastructure/http/handler/sendEventsList.js';
 import sendMessage from '@communication/infrastructure/http/handler/sendMessage.js';
 import sendSupportRequestConfirmation from '@communication/infrastructure/http/handler/sendSupportRequestConfirmation.js';
-import setRegionByDNI from '@communication/infrastructure/http/handler/setRegionByDNI.js';
+import setRegionByDni from '@communication/infrastructure/http/handler/setRegionByDni.js';
 import startSupport from '@communication/infrastructure/http/handler/startSupport.js';
 import subscribe from '@communication/infrastructure/http/handler/subscribe.js';
+import unassignTicket from '@communication/infrastructure/http/handler/unassignTicket.js';
 import { Config } from '@core/Config.js';
 import { HttpRouter } from '@core/domain/HttpRouter.js';
 import { Logger, LOGGER } from '@core/domain/Logger.js';
@@ -36,12 +40,17 @@ export class ModuleRouter implements HttpRouter {
   public async registerRoutes (): Promise<Router> {
     this.router.get('/', baseHandler(this.appName, this.moduleName));
     this.router.get('/subscribe', subscribe);
+    // this.router.get('/get-electoral-results', getElectoralResults);
     this.router.post('/messages', sendMessage);
     this.router.post('/start-support', startSupport);
-    this.router.post('/set-region', setRegionByDNI);
+    this.router.post('/set-region', setRegionByDni);
     this.router.post('/send-events-list', sendEventsList);
     this.router.post('/send-support-request-confirmation', sendSupportRequestConfirmation);
-    this.router.post('/ticket', createTicket);
+    this.router.post('/tickets/create', createTicket);
+    this.router.post('/tickets/assign', assignAgentToTicket);
+    this.router.post('/tickets/resolve', resolveTicket);
+    this.router.post('/tickets/reopen', reopenTicket);
+    this.router.post('/tickets/unassign', unassignTicket);
 
     return this.router;
   }

@@ -13,7 +13,7 @@ export default async (request: Request, response: Response, next: NextFunction):
 
     await sendSupportRequestConfirmation.run(phone);
 
-    response.status(HTTP_SUCCESS_CODES.OK).send('Message sent successfully.');
+    response.status(HTTP_SUCCESS_CODES.OK).send(`Support confirmation message sent successfully to phone ${ phone }.`);
   } catch (error) {
     next(error);
   }

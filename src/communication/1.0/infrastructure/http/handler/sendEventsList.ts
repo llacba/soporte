@@ -12,7 +12,7 @@ export default async (request: Request, response: Response, next: NextFunction):
 
     await sendEventsList.run(new Phone(phone_number));
 
-    response.status(HTTP_SUCCESS_CODES.OK).send('Events list sent successfully.');
+    response.status(HTTP_SUCCESS_CODES.OK).send(`Events list sent successfully to phone ${ phone_number }.`);
   } catch (error) {
     next(error);
   }

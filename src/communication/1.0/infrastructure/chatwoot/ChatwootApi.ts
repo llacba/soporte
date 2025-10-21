@@ -1,4 +1,5 @@
-import { CrmSendMessageData } from '@communication/domain/dto/CrmSendMessageData.js';
+import { Contact } from '@communication/domain/dto/Contact.js';
+import { CrmPayload } from '@communication/domain/dto/CrmPayload.js';
 import { Region } from '@communication/domain/dto/Region.js';
 import { Config } from '@core/Config.js';
 import { LOGGER, Logger } from '@core/domain/Logger.js';
@@ -13,10 +14,10 @@ export class ChatwootApi {
     @inject(LOGGER) private logger: Logger
   ) {}
 
-  public async sendMessage (data: CrmSendMessageData, message: TrimmedString): Promise<void> {
+  public async sendMessage (data: CrmPayload, message: TrimmedString): Promise<void> {
     const axiosInstance = this.axiosConfig();
 
-    const chatwootEndpoint = `inboxes/${ data.inboxId }/contacts/${ data.contactId }/conversations/${ data.conversationId }/messages`;
+    const chatwootEndpoint = `inboxes/${ data.inboxId }/contacts/${ data.crmContactId }/conversations/${ data.conversationId }/messages`;
 
     const body = {
       content: message.toPrimitives()
@@ -51,6 +52,24 @@ export class ChatwootApi {
     await axiosInstance.post(chatwootEndpoint, body);
   }
 
+  public async updateContactData (crmContactId: number, contact: Contact): Promise<void> {
+    const axiosInstance = this.axiosConfig();
+
+    const accountId = this.config.getChatwootAccountId();
+
+    const chatwootEndpoint = `accounts/${ accountId }/contacts/${ crmContactId }`;
+
+    const body = {
+      custom_attributes: {
+        contact_id: contact.id,
+        department: contact.department ? contact.department.name.toPrimitives() : null,
+        region: contact.region ? contact.region.name : null
+      }
+    };
+
+    await axiosInstance.put(chatwootEndpoint, body);
+  }
+
   private axiosConfig (): AxiosInstance {
     const chatwootApiKey = this.config.getChatwootApiAdminKey();
 
@@ -58,7 +77,7 @@ export class ChatwootApi {
       baseURL: this.config.getChatwootApiUrl(),
       headers: {
         'api_access_token': chatwootApiKey,
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json; charset=utf-8'
       }
     });
   }

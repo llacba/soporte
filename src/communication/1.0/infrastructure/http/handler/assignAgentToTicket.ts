@@ -1,5 +1,5 @@
-import { CreateTicket } from '@communication/application/CreateTicket.js';
-import { EVENTS } from '@communication/domain/type/Events.js';
+import { AssignAgentToTicket } from '@communication/application/AssignAgentToTicket.js';
+import { Agent } from '@communication/domain/dto/Agent.js';
 import { HTTP_SUCCESS_CODES } from '@core/domain/type/HttpCodes.js';
 import { Phone } from '@core/domain/valueObject/Phone.js';
 import { dependencyContainer } from '@src/dependencyContainer.js';
@@ -12,13 +12,14 @@ export default async (request: Request, response: Response, next: NextFunction):
     const inboxId = inbox_id as number;
     const crmContactId = request.body.meta.sender.id as number;
     const conversationId = request.body.messages[0].conversation_id as number;
-    const message = request.body.messages[0].content as EVENTS;
+    const agent = new Agent(request.body.meta.assignee);
     const phone = new Phone(request.body.meta.sender.phone_number as string);
     const { contact_id, department, region } = request.body.meta.sender.custom_attributes;
 
-    const createTicket = dependencyContainer.get<CreateTicket>(CreateTicket);
+    const assignAgentToTicket = dependencyContainer.get<AssignAgentToTicket>(AssignAgentToTicket);
 
-    await createTicket.run({
+    await assignAgentToTicket.run({
+      agent,
       conversationId,
       crmContactId: crmContactId,
       customAttributes: {
@@ -27,7 +28,6 @@ export default async (request: Request, response: Response, next: NextFunction):
         region
       },
       inboxId,
-      message,
       phone
     });
 

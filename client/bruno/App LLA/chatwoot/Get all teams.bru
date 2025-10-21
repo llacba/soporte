@@ -7,7 +7,7 @@ meta {
 get {
   url: {{chatwootHost}}/api/v1/accounts/:accountId/teams
   body: none
-  auth: basic
+  auth: none
 }
 
 params:path {
@@ -15,5 +15,5 @@ params:path {
 }
 
 headers {
-  api_access_token: 77X7m7BqAXzDvsdWARtZk9GP
+  api_access_token: {{chatwootApiToken}}
 }

@@ -1,7 +1,8 @@
-import { AssignPhoneRegionData } from '@communication/domain/dto/AssignPhoneRegionData.js';
-import { Region } from '@communication/domain/dto/Region.js';
+import { Contact } from '@communication/domain/dto/Contact.js';
 import { PartyElectoralData } from '@communication/domain/PartyElectoralData.js';
+import { EVENTS } from '@communication/domain/type/Events.js';
 import { DNI } from '@communication/domain/valueObject/DNI.js';
+import { Ticket } from '@communication/infrastructure/lla/dto/Ticket.js';
 import { LLAApi } from '@communication/infrastructure/lla/LLAApi.js';
 import { Config } from '@core/Config.js';
 import { LOGGER, Logger } from '@core/domain/Logger.js';
@@ -17,15 +18,39 @@ export class PartyElectoralDataLLA implements PartyElectoralData {
     @inject(LLAApi) private llaApi: LLAApi
   ) {}
 
-  public async getRegionByDni (dni: DNI): Promise<Nullable<Region>> {
-    return await this.llaApi.getRegionByDni(dni);
+  public async getContactByDni (dni: DNI): Promise<Nullable<Contact>> {
+    return await this.llaApi.getContactByDni(dni);
   }
 
-  public async getRegionByPhone (phone: Phone): Promise<Nullable<Region>> {
-    return await this.llaApi.getRegionByPhone(phone);
+  public async getContactByPhone (phone: Phone): Promise<Nullable<Contact>> {
+    return await this.llaApi.getContactByPhone(phone);
   }
 
-  public async createTicket (data: AssignPhoneRegionData): Promise<void> {
-    await this.llaApi.createTicket(data);
+  public async getCategoryIdByName (eventName: EVENTS): Promise<Nullable<number>> {
+    return await this.llaApi.getCategoryIdByName(eventName);
+  }
+
+  public async createTicket (ticket: Ticket): Promise<void> {
+    await this.llaApi.createTicket(ticket);
+  }
+
+  public async getTicketByConversationId (conversationId: number): Promise<Nullable<Ticket>> {
+    return await this.llaApi.getTicketByConversationId(conversationId);
+  }
+
+  public async assignAgentToTicket (ticket: Ticket): Promise<void> {
+    await this.llaApi.assignAgentToTicket(ticket);
+  }
+
+  public async reopenTicket (ticket: Ticket): Promise<void> {
+    await this.llaApi.reopenTicket(ticket);
+  }
+
+  public async resolveTicket (ticket: Ticket): Promise<void> {
+    await this.llaApi.resolveTicket(ticket);
+  }
+
+  public async unassignTicket (ticket: Ticket): Promise<void> {
+    await this.llaApi.unassignTicket(ticket);
   }
 }
