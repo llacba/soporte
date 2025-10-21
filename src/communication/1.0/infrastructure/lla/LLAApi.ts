@@ -126,14 +126,13 @@ LIMIT 1;`;
   "ultimaActualizacion"
 )
 VALUES (
-  ${ ticket.userId },
+  ${ ticket.crmContactId },
   ${ ticket.categoryId },
   ${ TICKET_STATUSES.PENDING },
   ${ ticket.details },
   NOW(),
   NOW()
-)
-RETURNING "idEscrutinio"`;
+);`;
 
     await database.query(queryString);
   }
