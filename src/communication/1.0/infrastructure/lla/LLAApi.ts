@@ -62,7 +62,7 @@ LIMIT 1;`;
   public async getCategoryIdByName (eventName: EVENTS): Promise<Nullable<number>> {
     const database = await this.getDatabase();
 
-    const queryString = `SELECT ci."idCategoria", ci."nombreCategoria" FROM "${ this.databaseName }"."CategoriasIncidencias" ci
+    const queryString = `SELECT ci."idCategoria", ci."nombreCategoria" FROM ${ this.databaseName }."CategoriasIncidencias" ci
 WHERE ci."nombreCategoria" = '${ eventName }'
 LIMIT 1;`;
 
