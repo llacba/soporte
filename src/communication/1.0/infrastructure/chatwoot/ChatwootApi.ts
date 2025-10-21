@@ -59,15 +59,21 @@ export class ChatwootApi {
 
     const chatwootEndpoint = `accounts/${ accountId }/contacts/${ contact.id }`;
 
-    const body = {
+    const body = JSON.stringify({
       custom_attributes: {
         contact_id: contact.id,
         department: contact.department ? contact.department.name.toPrimitives() : null,
         region: contact.region ? contact.region.name : null
       }
-    };
+    });
 
-    const response = await axiosInstance.put(chatwootEndpoint, JSON.stringify(body));
+    const response = await axiosInstance.put(chatwootEndpoint, body, {
+      headers: {
+        ...(axiosInstance.defaults.headers as Record<string, string>),
+        'Content-Length': Buffer.byteLength(body).toString()
+      },
+      transformRequest: [(d): typeof d => d]
+    });
 
     this.logger.info(JSON.stringify(response.data));
   }
