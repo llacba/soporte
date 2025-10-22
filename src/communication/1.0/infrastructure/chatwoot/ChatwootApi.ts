@@ -23,12 +23,6 @@ export class ChatwootApi {
       content: message.toPrimitives()
     };
 
-    this.logger.info(JSON.stringify({
-      body,
-      chatwootEndpoint,
-      data
-    }, null, 2));
-
     await axiosInstance.post(chatwootEndpoint, body);
   }
 

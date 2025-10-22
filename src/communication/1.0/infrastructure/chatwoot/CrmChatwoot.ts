@@ -24,7 +24,7 @@ export class CrmChatwoot implements Crm {
   ) {}
 
   public async askForDNI (data: CrmPayload): Promise<void> {
-    const message = new TrimmedString('Para poder continuar, ¿me compartís tu número de DNI por favor?');
+    const message = new TrimmedString('Para poder continuar, ¿me compartís tu número de DNI, por favor?');
 
     await this.chatwootApi.sendMessage(data, message);
   }

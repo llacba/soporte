@@ -2,6 +2,7 @@ import { CRM, Crm } from '@communication/domain/Crm.js';
 import { CrmPayloadWithPhone } from '@communication/domain/dto/CrmPayloadWithPhone.js';
 import { MESSAGE_SENDER, MessageSender } from '@communication/domain/MessageSender.js';
 import { PARTY_ELECTORAL_DATA, PartyElectoralData } from '@communication/domain/PartyElectoralData.js';
+import { sleep } from '@core/application/sleep.js';
 import { Config } from '@core/Config.js';
 import { LOGGER, Logger } from '@core/domain/Logger.js';
 import { TrimmedString } from '@core/domain/valueObject/TrimmedString.js';
@@ -33,6 +34,8 @@ export class StartSupport {
       this.logger.warning(`Party Electoral Data: Phone ${ payload.phone.toPrimitives() } not found.`);
 
       await this.crm.askForDNI(payload);
+
+      await sleep(1000);
 
       await this.crm.setPhoneNotFound(payload.crmContactId);
 
