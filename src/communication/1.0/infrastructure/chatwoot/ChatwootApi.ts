@@ -17,12 +17,13 @@ export class ChatwootApi {
   public async sendMessage (data: CrmPayload, message: TrimmedString): Promise<void> {
     const axiosInstance = this.axiosConfig();
 
+    const chatwootEndpoint = `inboxes/${ data.inboxId }/contacts/${ data.crmContactId }/conversations/${ data.conversationId }/messages`;
+
     this.logger.info(JSON.stringify({
+      chatwootEndpoint,
       data,
       message
     }, null, 2));
-
-    const chatwootEndpoint = `inboxes/${ data.inboxId }/contacts/${ data.crmContactId }/conversations/${ data.conversationId }/messages`;
 
     const body = {
       content: message.toPrimitives()
