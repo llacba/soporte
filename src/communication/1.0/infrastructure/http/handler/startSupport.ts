@@ -10,6 +10,7 @@ export default async (request: Request, response: Response, next: NextFunction):
 
     const inboxId = inbox_id as number;
     const crmContactId = request.body.meta.sender.id as number;
+    const accountId = request.body.messages[0].account_id as number;
     const conversationId = request.body.messages[0].conversation_id as number;
     const phone = new Phone(request.body.meta.sender.phone_number as string);
     const { contact_id, department, region } = request.body.meta.sender.custom_attributes;
@@ -17,6 +18,7 @@ export default async (request: Request, response: Response, next: NextFunction):
     const startSupport = dependencyContainer.get<StartSupport>(StartSupport);
 
     await startSupport.run({
+      accountId,
       conversationId,
       crmContactId,
       customAttributes: {

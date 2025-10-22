@@ -17,7 +17,7 @@ export class ChatwootApi {
   public async sendMessage (data: CrmPayload, message: TrimmedString): Promise<void> {
     const axiosInstance = this.axiosConfig();
 
-    const chatwootEndpoint = `public/api/v1/inboxes/${ data.inboxId }/contacts/${ data.crmContactId }/conversations/${ data.conversationId }/messages`;
+    const chatwootEndpoint = `api/v1/accounts/${ data.accountId }/conversations/${ data.conversationId }/messages`;
 
     const body = {
       content: message.toPrimitives()
