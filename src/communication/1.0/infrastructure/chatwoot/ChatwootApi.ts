@@ -17,13 +17,7 @@ export class ChatwootApi {
   public async sendMessage (data: CrmPayload, message: TrimmedString): Promise<void> {
     const axiosInstance = this.axiosConfig();
 
-    const chatwootEndpoint = `inboxes/${ data.inboxId }/contacts/${ data.crmContactId }/conversations/${ data.conversationId }/messages`;
-
-    this.logger.info(JSON.stringify({
-      chatwootEndpoint,
-      data,
-      message
-    }, null, 2));
+    const chatwootEndpoint = `public/api/v1/inboxes/${ data.inboxId }/contacts/${ data.crmContactId }/conversations/${ data.conversationId }/messages`;
 
     const body = {
       content: message.toPrimitives()
@@ -37,7 +31,7 @@ export class ChatwootApi {
 
     const accountId = this.config.getChatwootAccountId();
 
-    const chatwootEndpoint = `accounts/${ accountId }/teams`;
+    const chatwootEndpoint = `api/v1/accounts/${ accountId }/teams`;
 
     const response = await axiosInstance.get(chatwootEndpoint);
 
@@ -49,7 +43,7 @@ export class ChatwootApi {
 
     const accountId = this.config.getChatwootAccountId();
 
-    const chatwootEndpoint = `accounts/${ accountId }/conversations/${ conversationId }/assignments`;
+    const chatwootEndpoint = `api/v1/accounts/${ accountId }/conversations/${ conversationId }/assignments`;
 
     const body = {
       team_id: teamId
@@ -63,7 +57,7 @@ export class ChatwootApi {
 
     const accountId = this.config.getChatwootAccountId();
 
-    const chatwootEndpoint = `accounts/${ accountId }/contacts/${ crmContactId }`;
+    const chatwootEndpoint = `api/v1/accounts/${ accountId }/contacts/${ crmContactId }`;
 
     const body = {
       custom_attributes: {
@@ -82,7 +76,7 @@ export class ChatwootApi {
 
     const accountId = this.config.getChatwootAccountId();
 
-    const chatwootEndpoint = `accounts/${ accountId }/contacts/${ crmContactId }`;
+    const chatwootEndpoint = `api/v1/accounts/${ accountId }/contacts/${ crmContactId }`;
 
     const body = {
       custom_attributes: {
