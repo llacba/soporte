@@ -7,12 +7,13 @@ import { NextFunction, Request, Response } from 'express';
 
 export default async (request: Request, response: Response, next: NextFunction): Promise<void> => {
   try {
+    const dni = new DNI(request.body.messages[0].content as string);
+    // eslint-disable-next-line no-console
+    console.log('test');
     const { inbox_id } = request.body;
-
     const inboxId = inbox_id as number;
     const crmContactId = request.body.meta.sender.id as number;
     const conversationId = request.body.messages[0].conversation_id as number;
-    const message = new DNI(request.body.messages[0].content as string);
     const phone = new Phone(request.body.meta.sender.phone_number as string);
     const { contact_id, department, region } = request.body.meta.sender.custom_attributes;
 
@@ -26,12 +27,12 @@ export default async (request: Request, response: Response, next: NextFunction):
         department,
         region
       },
-      dni: message,
+      dni,
       inboxId,
       phone
     });
 
-    response.status(HTTP_SUCCESS_CODES.OK).send(`DNI ${ message } processed successfully.`);
+    response.status(HTTP_SUCCESS_CODES.OK).send(`DNI ${ dni } processed successfully.`);
   } catch (error) {
     next(error);
   }
