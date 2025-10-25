@@ -120,14 +120,14 @@ export class MessageSenderWhatsApp implements MessageSender {
             {
               reply: {
                 id: 'confirm_support',
-                title: 'Si, ya hable'
+                title: 'Ya le hable'
               },
               type: 'reply'
             },
             {
               reply: {
                 id: 'cancel_support',
-                title: 'No, aun no hable'
+                title: 'No hable todavia'
               },
               type: 'reply'
             }
