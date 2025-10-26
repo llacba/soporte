@@ -2,6 +2,7 @@ import { Contact } from '@communication/domain/dto/Contact.js';
 import { EVENTS } from '@communication/domain/type/Events.js';
 import { TICKET_STATUSES } from '@communication/domain/type/TicketStatus.js';
 import { DNI } from '@communication/domain/valueObject/DNI.js';
+import { ContactData } from '@communication/infrastructure/lla/dto/ContactData.js';
 import { Ticket } from '@communication/infrastructure/lla/dto/Ticket.js';
 import { Config } from '@core/Config.js';
 import { DATABASE_CONNECTION, DatabaseConnection } from '@core/domain/DatabaseConnection.js';
@@ -25,13 +26,9 @@ export class LLAApi {
   public async getContactByDni (dni: DNI): Promise<Nullable<Contact>> {
     const database = await this.getDatabase();
 
-    const queryString = `SELECT u."idUsuario" as "id", u."apellido" as "lastName", u."nombre" as "firstName", u."email" as "email", u."telefono" as "phone", u."dni" as "dni", d."idDepartamento" as "departmentId", d."descripcion" as "departmentName", bt.idBloque as "regionId", bt.nombreBloque as "regionName"
+    const queryString = `SELECT u."idUsuario" as "id", u."apellido" as "lastName", u."nombre" as "firstName", u."email" as "email", u."telefono" as "phone", u."dni" as "dni", ura."idProvincia" as "provinceId", ura."idDepartamento" as "departmentId", ura."idCircuito" as "circuitId", ura."idEscuela" as "schoolId", ura."idMesa" as "tableId"
 FROM ${ this.databaseName }."Usuario" u
 LEFT JOIN ${ this.databaseName }."usuario_rol_alcance" ura ON ura."usuario_id" = u."idUsuario"
-LEFT JOIN ${ this.databaseName }."Escuelas" e ON e."idEscuela" = ura."idEscuela"
-LEFT JOIN ${ this.databaseName }."CircuitoElectoral" c ON c."idCircuito" = e."idCircuito"
-LEFT JOIN ${ this.databaseName }."Departamento" d ON d."idDepartamento" = c."idDepartamento"
-LEFT JOIN ${ this.databaseName }."BloqueTerritorial" bt ON bt.idBloque = d.idBloque
 WHERE u."dni" = '${ dni.toPrimitives() }'
 LIMIT 1;`;
 
@@ -41,22 +38,9 @@ LIMIT 1;`;
       return null;
     }
 
-    return new Contact({
-      department: {
-        id: rows[0].departmentId,
-        name: rows[0].departmentName
-      },
-      dni: rows[0].dni,
-      email: rows[0].email,
-      firstName: rows[0].firstName,
-      id: rows[0].id,
-      lastName: rows[0].lastName,
-      phone: rows[0].phone,
-      region: {
-        id: rows[0].regionId,
-        name: rows[0].regionName
-      }
-    });
+    const contactData = new ContactData(rows[0]);
+
+    return await this.getContactWithRegion(contactData);
   }
 
   public async getCategoryIdByName (eventName: EVENTS): Promise<Nullable<number>> {
@@ -80,13 +64,9 @@ LIMIT 1;`;
 
     const parsedPhone = phone.toPrimitives().replace('+549', '');
 
-    const queryString = `SELECT u."idUsuario" as "id", u."apellido" as "lastName", u."nombre" as "firstName", u."email" as "email", u."telefono" as "phone", u."dni" as "dni", d."idDepartamento" as "departmentId", d."descripcion" as "departmentName", bt.idBloque as "regionId", bt.nombreBloque as "regionName"
+    const queryString = `SELECT u."idUsuario" as "id", u."apellido" as "lastName", u."nombre" as "firstName", u."email" as "email", u."telefono" as "phone", u."dni" as "dni", ura."idProvincia" as "provinceId", ura."idDepartamento" as "departmentId", ura."idCircuito" as "circuitId", ura."idEscuela" as "schoolId", ura."idMesa" as "tableId"
 FROM ${ this.databaseName }."Usuario" u
 LEFT JOIN ${ this.databaseName }."usuario_rol_alcance" ura ON ura."usuario_id" = u."idUsuario"
-LEFT JOIN ${ this.databaseName }."Escuelas" e ON e."idEscuela" = ura."idEscuela"
-LEFT JOIN ${ this.databaseName }."CircuitoElectoral" c ON c."idCircuito" = e."idCircuito"
-LEFT JOIN ${ this.databaseName }."Departamento" d ON d."idDepartamento" = c."idDepartamento"
-LEFT JOIN ${ this.databaseName }."BloqueTerritorial" bt ON bt.idBloque = d.idBloque
 WHERE u."telefono" = '${ parsedPhone }'
 LIMIT 1;`;
 
@@ -96,22 +76,9 @@ LIMIT 1;`;
       return null;
     }
 
-    return new Contact({
-      department: {
-        id: rows[0].departmentId,
-        name: rows[0].departmentName
-      },
-      dni: rows[0].dni,
-      email: rows[0].email,
-      firstName: rows[0].firstName,
-      id: rows[0].id,
-      lastName: rows[0].lastName,
-      phone: rows[0].phone,
-      region: {
-        id: rows[0].regionId,
-        name: rows[0].regionName
-      }
-    });
+    const contactData = new ContactData(rows[0]);
+
+    return await this.getContactWithRegion(contactData);
   }
 
   public async createTicket (ticket: Ticket): Promise<void> {
@@ -215,6 +182,166 @@ WHERE "idTicket" = ${ ticket.id };`;
     const scrutinyId = await this.saveScrutinyReport(electoralTableId, result);
 
     await this.saveReportDetails(scrutinyId, result.valoresTotalizadosPositivos);
+  }
+
+  private async getContactWithRegion (contactData: ContactData): Promise<Nullable<Contact>> {
+    if (contactData.provinceId) {
+      return null;
+    }
+
+    if (contactData.departmentId) {
+      return await this.getContactWithRegionByDepartmentId(contactData);
+    }
+
+    if (contactData.circuitId) {
+      return await this.getContactWithRegionByCircuitId(contactData);
+    }
+
+    if (contactData.schoolId) {
+      return await this.getContactWithRegionBySchoolId(contactData);
+    }
+
+    if (contactData.tableId) {
+      return await this.getContactWithRegionByTableId(contactData);
+    }
+  }
+
+  private async getContactWithRegionByDepartmentId (contactData: ContactData): Promise<Nullable<Contact>> {
+    const database = await this.getDatabase();
+
+    const queryString = `SELECT d."descripcion" as "departmentName", bt.idBloque as "regionId", bt.nombreBloque as "regionName"
+FROM ${ this.databaseName }."Departamento" d
+LEFT JOIN ${ this.databaseName }."BloqueTerritorial" bt ON bt.idBloque = d.idBloque
+WHERE d."idDepartamento" = ${ contactData.departmentId }
+LIMIT 1;`;
+
+    const { rows } = await database.query(queryString);
+
+    if (rows.length === 0) {
+      return null;
+    }
+
+    return new Contact({
+      department: {
+        id: rows[0].departmentId,
+        name: rows[0].departmentName
+      },
+      dni: contactData.dni.toPrimitives(),
+      email: contactData.email.toPrimitives(),
+      firstName: contactData.firstName.toPrimitives(),
+      id: contactData.id,
+      lastName: contactData.lastName.toPrimitives(),
+      phone: contactData.phone.toPrimitives(),
+      region: {
+        id: rows[0].regionId,
+        name: rows[0].regionName
+      }
+    });
+  }
+
+  private async getContactWithRegionByCircuitId (contactData: ContactData): Promise<Nullable<Contact>> {
+    const database = await this.getDatabase();
+
+    const queryString = `SELECT d."descripcion" as "departmentName", bt.idBloque as "regionId", bt.nombreBloque as "regionName"
+FROM ${ this.databaseName }."CircuitoElectoral" ce
+LEFT JOIN ${ this.databaseName }."Departamento" d ON d."idDepartamento" = ce."idDepartamento"
+LEFT JOIN ${ this.databaseName }."BloqueTerritorial" bt ON bt.idBloque = d.idBloque
+WHERE ce."idCircuito" = ${ contactData.circuitId }
+LIMIT 1;`;
+
+    const { rows } = await database.query(queryString);
+
+    if (rows.length === 0) {
+      return null;
+    }
+
+    return new Contact({
+      department: {
+        id: rows[0].departmentId,
+        name: rows[0].departmentName
+      },
+      dni: contactData.dni.toPrimitives(),
+      email: contactData.email.toPrimitives(),
+      firstName: contactData.firstName.toPrimitives(),
+      id: contactData.id,
+      lastName: contactData.lastName.toPrimitives(),
+      phone: contactData.phone.toPrimitives(),
+      region: {
+        id: rows[0].regionId,
+        name: rows[0].regionName
+      }
+    });
+  }
+
+  private async getContactWithRegionBySchoolId (contactData: ContactData): Promise<Nullable<Contact>> {
+    const database = await this.getDatabase();
+
+    const queryString = `SELECT d."descripcion" as "departmentName", bt.idBloque as "regionId", bt.nombreBloque as "regionName"
+FROM ${ this.databaseName }."Escuelas" e
+LEFT JOIN ${ this.databaseName }."CircuitoElectoral" ce ON ce."idCircuito" = e."idCircuito"
+LEFT JOIN ${ this.databaseName }."Departamento" d ON d."idDepartamento" = ce."idDepartamento"
+LEFT JOIN ${ this.databaseName }."BloqueTerritorial" bt ON bt.idBloque = d.idBloque
+WHERE e."idEscuela" = ${ contactData.schoolId }
+LIMIT 1;`;
+
+    const { rows } = await database.query(queryString);
+
+    if (rows.length === 0) {
+      return null;
+    }
+
+    return new Contact({
+      department: {
+        id: rows[0].departmentId,
+        name: rows[0].departmentName
+      },
+      dni: contactData.dni.toPrimitives(),
+      email: contactData.email.toPrimitives(),
+      firstName: contactData.firstName.toPrimitives(),
+      id: contactData.id,
+      lastName: contactData.lastName.toPrimitives(),
+      phone: contactData.phone.toPrimitives(),
+      region: {
+        id: rows[0].regionId,
+        name: rows[0].regionName
+      }
+    });
+  }
+
+  private async getContactWithRegionByTableId (contactData: ContactData): Promise<Nullable<Contact>> {
+    const database = await this.getDatabase();
+
+    const queryString = `SELECT d."descripcion" as "departmentName", bt.idBloque as "regionId", bt.nombreBloque as "regionName"
+FROM ${ this.databaseName }."Mesas" m
+LEFT JOIN ${ this.databaseName }."Escuelas" e ON e."idEscuela" = m."idEscuela"
+LEFT JOIN ${ this.databaseName }."CircuitoElectoral" ce ON ce."idCircuito" = e."idCircuito"
+LEFT JOIN ${ this.databaseName }."Departamento" d ON d."idDepartamento" = ce."idDepartamento"
+LEFT JOIN ${ this.databaseName }."BloqueTerritorial" bt ON bt.idBloque = d.idBloque
+WHERE m."idMesa" = ${ contactData.tableId }
+LIMIT 1;`;
+
+    const { rows } = await database.query(queryString);
+
+    if (rows.length === 0) {
+      return null;
+    }
+
+    return new Contact({
+      department: {
+        id: rows[0].departmentId,
+        name: rows[0].departmentName
+      },
+      dni: contactData.dni.toPrimitives(),
+      email: contactData.email.toPrimitives(),
+      firstName: contactData.firstName.toPrimitives(),
+      id: contactData.id,
+      lastName: contactData.lastName.toPrimitives(),
+      phone: contactData.phone.toPrimitives(),
+      region: {
+        id: rows[0].regionId,
+        name: rows[0].regionName
+      }
+    });
   }
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
