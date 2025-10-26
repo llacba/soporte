@@ -1,4 +1,5 @@
 import { DNI } from '@communication/domain/valueObject/DNI.js';
+import { Nullable } from '@core/domain/type/Nullable.js';
 import { Email } from '@core/domain/valueObject/Email.js';
 import { Phone } from '@core/domain/valueObject/Phone.js';
 import { TrimmedString } from '@core/domain/valueObject/TrimmedString.js';
@@ -7,7 +8,7 @@ export interface ContactDataPrimitives {
   circuitId: number;
   departmentId: number;
   dni: string;
-  email: string;
+  email: Nullable<string>;
   firstName: string;
   id: number;
   lastName: string;
@@ -21,7 +22,7 @@ export class ContactData {
   public circuitId: number;
   public departmentId: number;
   public dni: DNI;
-  public email: Email;
+  public email: Nullable<Email>;
   public firstName: TrimmedString;
   public id: number;
   public lastName: TrimmedString;
@@ -32,7 +33,7 @@ export class ContactData {
 
   public constructor (primitives: ContactDataPrimitives) {
     this.dni = new DNI(primitives.dni);
-    this.email = new Email(primitives.email);
+    this.email = primitives.email ? new Email(primitives.email) : undefined;
     this.firstName = new TrimmedString(primitives.firstName);
     this.id = primitives.id;
     this.lastName = new TrimmedString(primitives.lastName);
@@ -49,7 +50,7 @@ export class ContactData {
       circuitId: this.circuitId,
       departmentId: this.departmentId,
       dni: this.dni.toPrimitives(),
-      email: this.email.toPrimitives(),
+      email: this.email ? this.email.toPrimitives() : undefined,
       firstName: this.firstName.toPrimitives(),
       id: this.id,
       lastName: this.lastName.toPrimitives(),
