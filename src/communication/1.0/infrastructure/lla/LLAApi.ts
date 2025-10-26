@@ -227,7 +227,7 @@ LIMIT 1;`;
         name: rows[0].departmentName
       },
       dni: contactData.dni.toPrimitives(),
-      email: contactData.email.toPrimitives(),
+      email: contactData.email ? contactData.email.toPrimitives() : null,
       firstName: contactData.firstName.toPrimitives(),
       id: contactData.id,
       lastName: contactData.lastName.toPrimitives(),
@@ -261,7 +261,7 @@ LIMIT 1;`;
         name: rows[0].departmentName
       },
       dni: contactData.dni.toPrimitives(),
-      email: contactData.email.toPrimitives(),
+      email: contactData.email ? contactData.email.toPrimitives() : null,
       firstName: contactData.firstName.toPrimitives(),
       id: contactData.id,
       lastName: contactData.lastName.toPrimitives(),
@@ -296,7 +296,7 @@ LIMIT 1;`;
         name: rows[0].departmentName
       },
       dni: contactData.dni.toPrimitives(),
-      email: contactData.email.toPrimitives(),
+      email: contactData.email ? contactData.email.toPrimitives() : null,
       firstName: contactData.firstName.toPrimitives(),
       id: contactData.id,
       lastName: contactData.lastName.toPrimitives(),
@@ -332,7 +332,7 @@ LIMIT 1;`;
         name: rows[0].departmentName
       },
       dni: contactData.dni.toPrimitives(),
-      email: contactData.email.toPrimitives(),
+      email: contactData.email ? contactData.email.toPrimitives() : null,
       firstName: contactData.firstName.toPrimitives(),
       id: contactData.id,
       lastName: contactData.lastName.toPrimitives(),
